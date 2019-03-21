@@ -1,6 +1,6 @@
 import datetime
 from flask import abort, make_response, jsonify
-
+from api.util import Auth
 class User():
 
     user_db = []
@@ -24,7 +24,20 @@ class User():
                 'password':self.password,
                 'recovery_email':self.recovery_email
             })            
-            return User.user_db
+            token = Auth().encode_token(self.email)
+            
+            return abort(
+                jsonify({
+                'status':200,
+                'data':[{
+                        'token':token.decode("utf-8"),
+                        'user':{
+                            'id':self.id,
+                            'firstname':self.firstname
+                        } 
+                    }]
+                })
+            )
         
         abort(jsonify({
             'status':400,
