@@ -50,8 +50,8 @@ The action taken on the representation will be contextual to the media type bein
 
 ```json
 {
-  “status” : 200, 
-  “data” : {...}
+  "status" : 200, 
+  "data" : {...}
 }
 
 ```
@@ -60,8 +60,8 @@ The action taken on the representation will be contextual to the media type bein
 
 ```json
 {
-  “status” : 404,
-  “error” : “relevant-error-message”
+  "status" : 404,
+  "error" : "relevant-error-message"
 }
 
 ```
@@ -80,17 +80,17 @@ Response body:
 
 ```json
 {
-  “status” : Integer, 
-  “data” : [
+  "status" : Integer, 
+  "data" : [
     {
-      “id” : Integer, 
-      “createdOn” : DateTime,
-      “subject” : String,
-      “message” : String,
-      “senderId” : Integer,
-      “receiverId” : Integer,
-      ”parentMessageId” : Integer,
-      “status” : String,
+      "id" : Integer, 
+      "createdOn" : DateTime,
+      "subject" : String,
+      "message" : String,
+      "senderId" : Integer,
+      "receiverId" : Integer,
+      "parentMessageId" : Integer,
+      "status" : String,
     }, 
     {....},
     {....},
@@ -104,16 +104,16 @@ Response body:
 
 ```json
 {
-  “status” : Integer, 
-  “data” : [{
-      'id" : Integer, 
-      “createdOn” : DateTime,
-      “subject” : String,
-      “message” : String,
-      “senderId” : Integer,
-      “receiverId” : Integer,
-      ”parentMessageId” : Integer,
-      “status” : String,
+  "status" : Integer, 
+  "data" : [{
+      "id" : Integer, 
+      "createdOn" : DateTime,
+      "subject" : String,
+      "message" : String,
+      "senderId" : Integer,
+      "receiverId" : Integer,
+      "parentMessageId" : Integer,
+      "status" : String,
   }]
 }
 
@@ -125,13 +125,13 @@ Request body:
 
 ```json
 {
-  “status” : Integer, 
-  “data” : [{
-     “createdOn” : DateTime,        
-     “subject” : String,
-     “message” : String,
-     ”parentMessageId” : Integer,
-     “status” : String,
+  "status" : Integer, 
+  "data" : [{
+     "createdOn" : DateTime,        
+     "subject" : String,
+     "message" : String,
+     "parentMessageId" : Integer,
+     "status" : String,
   }]
 }
 
