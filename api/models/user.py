@@ -3,7 +3,19 @@ from flask import abort, make_response, jsonify
 from api.util import Auth,UserValidator
 class User():
 
-    user_db = []
+    user_db = [{
+        'id':1,
+        'email':'alex@epicmail.com',
+        'lastname':'alex',
+        'firstname':'James',
+        'recovery_email':'james@gmail.com'
+        },{
+        'id':1,
+        'email':'steven@epicmail.com',
+        'lastname':'steven',
+        'firstname':'walton',
+        'recovery_email':'walton@gmail.com'            
+        }]
 
     def __init__(self,email,firstname,lastname,password,recovery_email):
         self.id = id
