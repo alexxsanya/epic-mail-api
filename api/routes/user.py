@@ -3,7 +3,7 @@ from api.models import User
 from api.util import UserValidator
 user_api = Blueprint("user_api", __name__)
 
-@user_api.route('/create-user',methods=['POST'])
+@user_api.route('/auth/signup',methods=['POST'])
 def create_user():
     user = request.get_json()
     if UserValidator.validator(user):
