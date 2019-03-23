@@ -6,11 +6,14 @@ python:
 install:
   - pip install -r requirements.txt
   
-script: true
+script:
   - pytest --cov=api
-  
+  - coverage 
+  - coveralls    
 after_script:
   - coveralls
-
+  - coverage 
 after_success:
   - codecov
+  - coveralls
+  - coverage
