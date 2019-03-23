@@ -53,6 +53,14 @@ class Message:
             'createdOn': self.createdOn
         })
 
+        abort(jsonify({
+            'status':201,
+            'data':{
+                'message_id': self.id,
+                'message': 'Message successfully sent to {}'.format(self.reciever_id)
+            }
+        }))
+
     @staticmethod
     def get_received_messages(reciever_id):
         r_msgs = [msg for msg in Message.receivedMessages \
