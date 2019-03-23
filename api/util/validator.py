@@ -90,7 +90,10 @@ class UserValidator():
         valid_email = email_regex.search(email)
         if valid_email:
             return True
-        return False
+        abort(UserValidator().error_message(
+            error = "Invalid email format for {}".format(email),
+            code = 400,
+        )) 
 
     @staticmethod
     def is_pass_valid(password):
@@ -104,3 +107,50 @@ class UserValidator():
                 code = 400,
             ))    
         return True      
+
+class MessageValidator():
+
+    message_object = None
+
+    status = ('draft','sent','unread')
+
+    def __init__ (self):
+        pass
+
+    @staticmethod
+    def validator(message):
+        message = {
+            'subject':message.get('subject'),
+            'msgBody':message.get('msgBody'),
+			'parentId':message.get('parentId'),
+			'status':message.get('status','draft'),
+            'reciever':message.get('reciever')
+        }
+        MessageValidator.message_object = message
+
+        for field in message: 
+            MessageValidator().validate_message(field) 
+
+        return True
+
+    def validate_message(self,field):
+        method_name = 'validate_' + str(field)
+
+        method = getattr(self, method_name, lambda: "Invalid Field")
+        
+        return method()
+
+    def validate_receiver(self):
+        pass
+    
+    def validate_sender(self):
+        pass
+
+    def validate_subject(self):
+        pass
+
+    def validate_body(self):
+        pass
+
+    def validate_status(self):
+        pass
