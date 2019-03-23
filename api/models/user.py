@@ -43,14 +43,7 @@ class User():
             'status':400,
             'error':'Your Email address already exist in the system'
         }))
-                
-    @staticmethod
-    def get_user(id):
-        if UserValidator.is_email_valid(id):
-            user = [u for u in User.user_db if u['id'] == id]
-            if len(user) == 1:
-                return user       
-
+        
     @staticmethod
     def user_exist(email):
         if email in str(User.user_db):
