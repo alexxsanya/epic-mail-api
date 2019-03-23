@@ -2,6 +2,7 @@ import pytest
 import json,jwt
 from api import app
 from api.util import Auth
+from api.models import User
 class TestAuth():
     valid_token = None
     def test_encode_token_works(self):
@@ -138,3 +139,42 @@ class TestUserSignupAPI:
                 },
             content_type='application/json')
         assert b"Recovery Email has an incorrect email format" in response.data
+
+class TestUserSigninAPI:
+    User.user_db.append({
+        'id':2183,
+        'email':'tests@epicmail.com',
+        'firstname':'Test User',
+        'lastname':'Test',
+        'password':'Test@123',
+        'recovery_email':'tests1@epicmail.com'
+    })
+    def test_login_pass_correct_cred(self,client):
+        response = client.post(
+            '/api/v1/auth/login',
+            json={
+                    "email": "tests@epicmail.com",
+                    "password": "Test@123",
+                },
+            content_type='application/json')
+        assert response.status_code == 200        
+    
+    def test_login_pass_incorrect_pass_format(self,client):
+        response = client.post(
+            '/api/v1/auth/login',
+            json={
+                    "email": "test@epicmail.com",
+                    "password": "Test123",
+                },
+            content_type='application/json')
+        assert b'Password should be atleast 6 char' in response.data
+
+    def test_login_pass_incorrect_cred(self,client):
+        response = client.post(
+            '/api/v1/auth/login',
+            json={
+                    "email": "teste@picmailcom",
+                    "password": "Test@123",
+                },
+            content_type='application/json')
+        assert b'No user with supplied password' in response.data
