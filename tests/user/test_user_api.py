@@ -47,7 +47,7 @@ class TestUserSignupAPI:
                     "recovery_email": "alex@pic.com"
                 },
             content_type='application/json')
-        assert b"Incorrect email format" in response.data
+        assert b"Invalid email format for" in response.data
 
     def test_create_user_dont_pass_with_same_email(self,client):
         response = client.post(
@@ -138,7 +138,7 @@ class TestUserSignupAPI:
                     "recovery_email": "alexxpeccc.com"
                 },
             content_type='application/json')
-        assert b"Recovery Email has an incorrect email format" in response.data
+        assert b"Invalid email format for" in response.data
 
 class TestUserSigninAPI:
     User.user_db.append({
@@ -177,4 +177,4 @@ class TestUserSigninAPI:
                     "password": "Test@123",
                 },
             content_type='application/json')
-        assert b'No user with supplied password' in response.data
+        assert b'Invalid email format for' in response.data
