@@ -103,7 +103,7 @@ class MessageValidator():
 
     message_object = None
 
-    status = ('draft','sent','unread')
+    acceptable_status = ('draft','sent','unread')
 
     def __init__ (self):
         pass
@@ -132,16 +132,34 @@ class MessageValidator():
         return method()
 
     def validate_receiver(self):
-        pass
+        UserValidator.is_email_valid(\
+            self.message_object.get('reciever'))
     
     def validate_sender(self):
-        pass
+        UserValidator.is_email_valid(\
+            self.message_object.get('sender'))
 
     def validate_subject(self):
-        pass
+        MessageValidator.is_attr_none(\
+            self.message_object.get('subject'), 'Subject')
 
     def validate_body(self):
-        pass
+        MessageValidator.is_attr_none(\
+            self.message_object.get('msgBody'), 'Message Body')
 
     def validate_status(self):
-        pass
+        status = self.message_object.get('status')
+        if not status in self.acceptable_status:
+             abort(UserValidator().error_message(
+                error = "{} is not an acceptable status".format(status),
+                code = 400,
+            ))             
+
+    @staticmethod
+    def is_attr_none(attr,field): 
+        if len(attr.strip()) < 4:
+             abort(jsonify({
+                'error':"\'{}\' can not be this small in length".format(field),
+                'code':400,
+                'info':'atleast a 4 letter {}'.format(field)
+             })) 
