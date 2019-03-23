@@ -30,12 +30,7 @@ class UserValidator():
 
     def validate_email(self):
         email = self.user_object.get('email')
-
-        if not UserValidator.is_email_valid(email):
-            abort(self.error_message(
-                error = 'Incorrect email format',
-                code = 400
-            ))
+        UserValidator.is_email_valid(email)
         
     def validate_firstname(self):
         fname = self.user_object.get('firstname')
@@ -69,13 +64,9 @@ class UserValidator():
             abort(self.error_message(
                 error = 'Recovery email & your choosen email address can not be the same',
                 code = 400
-            )) 
-        if not UserValidator.is_email_valid(r_email):
-            abort(self.error_message(
-                error = 'Recovery Email has an incorrect email format',
-                code = 400
-            ))                
-
+            ))               
+        UserValidator.is_email_valid(r_email)
+        
     def error_message(self,error,code):
         return jsonify({
             'status':code,
