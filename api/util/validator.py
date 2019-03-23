@@ -60,15 +60,7 @@ class UserValidator():
             )) 
 
     def validate_password(self):
-        pass_regx = re.match(\
-            r'''^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$])[\w\d@#$]{6,12}$''',\
-                self.user_object.get('password'))
-        if not pass_regx:
-             abort(self.error_message(
-                error = '''Password should be atleast 6 char a combination of \
-                    lower & upper letters, numbers and @ # $'''.replace("                     ", " "),
-                code = 400,
-            ))           
+        UserValidator.is_pass_valid(self.user_object.get('password'))           
 
     def validate_recovery_email(self):
         r_email = self.user_object.get('recovery_email')
@@ -99,3 +91,16 @@ class UserValidator():
         if valid_email:
             return True
         return False
+
+    @staticmethod
+    def is_pass_valid(password):
+        pass_regx = re.match(\
+            r'''^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$])[\w\d@#$]{6,12}$''',\
+                password)
+        if not pass_regx:
+             abort(UserValidator().error_message(
+                error = '''Password should be atleast 6 char a combination of \
+                    lower & upper letters, numbers and @ # $'''.replace("                     ", " "),
+                code = 400,
+            ))    
+        return True      
