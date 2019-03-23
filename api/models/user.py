@@ -28,7 +28,7 @@ class User():
             
             return abort(
                 jsonify({
-                'status':200,
+                'status':201,
                 'data':[{
                         'token':token.decode("utf-8"),
                         'user':{
@@ -45,9 +45,9 @@ class User():
         }))
                 
     @staticmethod
-    def get_user(user_email):
-        if UserValidator.validate_email(user_email):
-            user = [u for u in User.user_db if u['email'] == user_email]
+    def get_user(id):
+        if UserValidator.is_email_valid(id):
+            user = [u for u in User.user_db if u['id'] == id]
             if len(user) == 1:
                 return user       
 
@@ -55,4 +55,27 @@ class User():
     def user_exist(email):
         if email in str(User.user_db):
             return True
+        return False
+    @staticmethod
+    def login_user(email,password):
+         
+        if ( UserValidator.is_email_valid(email) and \
+                UserValidator.is_pass_valid(password)):
+
+            user = [u for u in User.user_db if ((u['email'] == email) \
+                    and (u['password'] == password))]
+            if len(user) == 1:
+                token = Auth().encode_token(email)
+                abort(
+                    jsonify({
+                    'status':200,
+                    'data':[{
+                            'token':token.decode("utf-8"),
+                            'user':{
+                                'id':user[0]['id'],
+                                'firstname':user[0]['firstname']
+                            }
+                        }]
+                    })
+                )
         return False
