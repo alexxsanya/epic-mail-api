@@ -143,7 +143,7 @@ class MessageValidator():
         MessageValidator.is_attr_none(\
             self.message_object.get('subject'), 'Subject')
 
-    def validate_body(self):
+    def validate_msgBody(self):
         MessageValidator.is_attr_none(\
             self.message_object.get('msgBody'), 'Message Body')
 
