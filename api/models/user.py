@@ -91,7 +91,7 @@ class User():
         if UserValidator.is_email_valid(email):
             user = [user for user in User.user_db if user['email'] == email]
             if len(user) == 1:
-                return user[0]['email']
+                return user[0]['id']
             abort(jsonify({
                 'status':'400',
                 'error':'user {} doesn\'t exist'.format(email)
