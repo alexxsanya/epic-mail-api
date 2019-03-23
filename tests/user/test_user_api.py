@@ -140,6 +140,10 @@ class TestUserSignupAPI:
             content_type='application/json')
         assert b"Invalid email format for" in response.data
 
+    def test_get_user_id(self,client):
+        user_id = User.get_user_id('alex@epicmail.com')
+        assert user_id == 1
+
 class TestUserSigninAPI:
     User.user_db.append({
         'id':2183,
