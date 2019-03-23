@@ -1,6 +1,6 @@
 import datetime
 from flask import abort, make_response, jsonify
-from api.util import Auth
+from api.util import Auth,UserValidator
 class User():
 
     user_db = []
@@ -44,9 +44,12 @@ class User():
             'error':'Your Email address already exist in the system'
         }))
                 
-    
-    def get_user(self):
-        pass
+    @staticmethod
+    def get_user(user_email):
+        if UserValidator.validate_email(user_email):
+            user = [u for u in User.user_db if u['email'] == user_email]
+            if len(user) == 1:
+                return user       
 
     @staticmethod
     def user_exist(email):
