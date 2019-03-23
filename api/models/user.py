@@ -43,12 +43,13 @@ class User():
             'status':400,
             'error':'Your Email address already exist in the system'
         }))
-        
+
     @staticmethod
     def user_exist(email):
         if email in str(User.user_db):
             return True
         return False
+
     @staticmethod
     def login_user(email,password):
          
@@ -72,3 +73,14 @@ class User():
                     })
                 )
         return False
+
+    @staticmethod
+    def get_user_id(email):
+        if UserValidator.is_email_valid(email):
+            user = [user for user in User.user_db if user['email'] == email]
+            if len(user) == 1:
+                return user[0]['email']
+            abort(jsonify({
+                'status':'400',
+                'error':'user {} doesn\'t exist'.format(email)
+            }))
