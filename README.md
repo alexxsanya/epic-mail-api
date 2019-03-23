@@ -1,5 +1,9 @@
 # EPIC MAIL API
 
+## Project Status
+[![Build Status](https://travis-ci.org/alexxsanya/EPIC-MAIL-API.svg?branch=ft-as_user_can_create_account-164792652)](https://travis-ci.org/alexxsanya/EPIC-MAIL-API)
+[![Coverage Status](https://coveralls.io/repos/github/alexxsanya/EPIC-MAIL-API/badge.svg?branch=ft-as_user_can_create_account-164792652)](https://coveralls.io/github/alexxsanya/EPIC-MAIL-API?branch=ft-as_user_can_create_account-164792652)
+
 ## Project Overview
 
 The internet is increasingly becoming an integral part of lives. Ever since the invention of [electronic mail](https://en.wikipedia.org/wiki/Email) by [Ray Tomlinson](https://en.wikipedia.org/wiki/Ray_Tomlinson), emails have grown to become the primary medium of exchanging information over the internet between two or more people, until the advent of Instant Messaging (IM) Apps.
