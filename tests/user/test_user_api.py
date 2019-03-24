@@ -1,21 +1,9 @@
 import pytest
 import json,jwt
 from api import app
-from api.util import Auth
 from api.models import User
 class TestAuth():
     valid_token = None
-    def test_encode_token_works(self):
-        TestAuth.valid_token = Auth().encode_token('alex')
-        assert len(TestAuth.valid_token) > 20
-
-    @pytest.mark.xfail(raises=jwt.exceptions.DecodeError)
-    def test_decode_token_with_incorrect(self):
-        Auth().decode_token(83292)
-
-    def test_decode_token_return_correct(self):
-        user = Auth().decode_token(TestAuth.valid_token.decode('utf-8'))
-        assert user == 'alex'
 
 class TestUserSignupAPI:  
     
