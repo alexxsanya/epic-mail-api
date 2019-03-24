@@ -20,3 +20,12 @@ def send_message():
             sender = msg.get('sender',None),
             reciever = msg.get('reciever',None)
         ).send_message()
+
+@msg_api.route('/messages',methods=['GET'])
+
+def get_all_recieved():
+    received = Message.get_received_messages(1)
+    return jsonify({
+        'data': received,
+        'status':200
+    })
