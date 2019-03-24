@@ -29,3 +29,14 @@ def get_all_recieved():
         'data': received,
         'status':200
     })
+
+@msg_api.route('/messages/<int:message_id>')
+
+def get_specific_message(message_id):
+
+    msg = Message.get_one_message(message_id)
+
+    return jsonify({
+        'data':msg,
+        'status':200
+    })
