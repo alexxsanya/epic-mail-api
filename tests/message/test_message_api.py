@@ -72,3 +72,28 @@ class TestRecievedAPI:
         response = client.get(
             url_for('msg_api.get_all_recieved'))
         assert response.status_code == 200   
+
+class TestGetSingleMessageAPI:
+    message = {
+                "subject":"Hey Alex",
+                "reciever":"alex@epicmail.com",
+                "sender":"steven@epicmail.com",
+                "msgBody":"Testing if you can get this message"
+            } 
+
+    def send_message(self,client):
+        client.post(
+            url_for('msg_api.send_message'),
+            json=self.message,
+            content_type='application/json')  
+
+    def test_get_message_by_id(self,client):
+
+        response = client.get('api/v1/messages/1') 
+        assert response.status_code == 200   
+    
+    @pytest.mark.xfail(raises=IndexError)
+    def test_get_message_by_inexistent_id(self,client):
+
+        response = client.get('api/v1/messages/100') 
+        assert b'No message with supplied message-id' in response.data
