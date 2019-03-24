@@ -109,5 +109,20 @@ class Message:
         msg = [m for m in Message.messages if m['id']==msg_id]
         msg[0]['status'] = status
 
+    @staticmethod
+    def get_one_message(msg_id):
+        try: 
+            _msg = [m for m in Message.messages if m['id'] == msg_id]
+            sender = [s for s in Message.sentMessages if s['message_id'] == msg_id]
+            receiver = [r for r in Message.receivedMessages if r['message_id'] == msg_id]
+            _msg[0]['sender_id'] = sender[0]['sender_id']
+            _msg[0]['reciever_id'] = receiver[0]['reciever_id']
 
+            return _msg
+            
+        except IndexError:
+            abort(jsonify({
+                'status':204,
+                'error': 'No message with supplied message-id {}'.format(msg_id)
+            }))
     
