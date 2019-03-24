@@ -92,7 +92,7 @@ class Message:
     @staticmethod
     def get_unread_messages():
         r_msgs = Message.get_received_messages()
-        unread_msg = [msg for msg in r_msgs if msg['status']=='unread']
+        unread_msg = [msg for msg in r_msgs if msg['status']=='sent']
         return unread_msg
 
     @staticmethod
