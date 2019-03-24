@@ -64,3 +64,11 @@ class TestMessageAPI:
             json={},
             content_type='application/json')
         assert b'Invalid Request Body' in response.data     
+
+class TestRecievedAPI:
+
+    def test_message_recieved_api(self,client):
+
+        response = client.get(
+            url_for('msg_api.get_all_recieved'))
+        assert response.status_code == 200   
