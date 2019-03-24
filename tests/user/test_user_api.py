@@ -170,3 +170,12 @@ class TestUserSigninAPI:
                 },
             content_type='application/json')
         assert b'Invalid email format for' in response.data
+    def test_login_pass_inexistent_user(self,client):
+        response = client.post(
+            '/api/v1/auth/login',
+            json={
+                    "email": "tested@picmail.com",
+                    "password": "Test@123",
+                },
+            content_type='application/json')
+        assert b'No user with supplied password or ' in response.data
