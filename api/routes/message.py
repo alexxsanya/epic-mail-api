@@ -54,3 +54,13 @@ def get_all_unread():
         'status':200,
         'data':unread
     })
+
+@msg_api.route('/messages/sent',methods=['GET'])
+@jwt_required
+def get_all_sent():
+    sent = Message.get_sent_messages()
+
+    return jsonify({
+        'status':200,
+        'data':sent
+    })
