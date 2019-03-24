@@ -124,3 +124,10 @@ class TestGetSingleMessageAPI:
         response = client.get('api/v1/messages/100',
             headers=dict(Authorization='Bearer ' + token)) 
         assert b'No message with supplied message-id' in response.data
+
+class TestGetAllUnreadAPI:
+    def test_get_all_unread(self,client,user_token):
+        token = user_token
+        response = client.get('api/v1/messages/unread',
+            headers=dict(Authorization='Bearer ' + token)) 
+        assert response.status_code == 200         
