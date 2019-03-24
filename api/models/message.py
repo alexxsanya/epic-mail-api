@@ -64,13 +64,20 @@ class Message:
     @staticmethod
     def get_received_messages(reciever_id):
         r_msgs = [msg for msg in Message.receivedMessages \
-                    if reciever_id in msg['reciever_id']]
+                    if reciever_id == msg['reciever_id']]
 
         r_msg_db = []
 
         for msg in r_msgs:
+            
             mgx = [m for m in Message.messages if msg['message_id'] == m['id']]
+            
             if(len(mgx)>0):
+                
+                sender = [m for m in Message.sentMessages if m['message_id']==reciever_id]
+                
+                mgx[0]['sender_id'] = sender[0]['sender_id']
+                
                 r_msg_db.append(mgx[0])
 
         return r_msg_db
