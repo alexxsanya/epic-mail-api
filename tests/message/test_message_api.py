@@ -131,3 +131,10 @@ class TestGetAllUnreadAPI:
         response = client.get('api/v1/messages/unread',
             headers=dict(Authorization='Bearer ' + token)) 
         assert response.status_code == 200         
+
+class TestGetAllSentAPI:
+    def test_get_all_sent(self,client,user_token):
+        token = user_token
+        response = client.get('api/v1/messages/sent',
+            headers=dict(Authorization='Bearer ' + token)) 
+        assert response.status_code == 200         
