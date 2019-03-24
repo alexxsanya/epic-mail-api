@@ -12,8 +12,8 @@ class Message:
     sentMessages = []
 
     def __init__(   self,
-                    subject,
-                    msgBody,
+                    subject='',
+                    msgBody='',
                     status="draft",
                     createdOn=None,
                     reciever=0,
@@ -131,4 +131,37 @@ class Message:
                 'status':204,
                 'error': 'No message with supplied message-id {}'.format(msg_id)
             }))
-    
+
+    def delete_message(self,msg_id):
+        user_id = get_jwt_identity()
+        msg_item_record = [m for m in self.messages\
+                            if m['id'] == msg_id]
+        if len(msg_item_record) > 0:
+            snt_item_record = [s for s in self.sentMessages\
+                                if s['message_id'] == msg_id]
+            rec_item_record = [r for r in self.receivedMessages\
+                                if r['message_id'] == msg_id]
+
+            if user_id == snt_item_record[0]['sender_id'] or\
+                user_id == rec_item_record[0]['reciever_id']:
+                
+                self.messages.remove(msg_item_record[0])
+                self.sentMessages.remove(snt_item_record[0])
+                self.receivedMessages.remove(rec_item_record[0])
+
+                abort(jsonify({
+                    'status':200,
+                    'data':{
+                        'message':'Message {} has been deleted'.format(msg_id)
+                    }
+                }))
+
+            abort(jsonify({
+                'status':401,
+                'message':'You are not permitted to delete this message'
+            }))
+        
+        abort(jsonify({
+            'status':204,
+            'error':'No message with provided id - {} '.format(msg_id)
+        }))
