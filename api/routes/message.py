@@ -64,3 +64,8 @@ def get_all_sent():
         'status':200,
         'data':sent
     })
+
+@msg_api.route('/messages/<int:message_id>', methods=['DELETE'])
+@jwt_required
+def delete_message(message_id):
+    Message().delete_message(message_id)
