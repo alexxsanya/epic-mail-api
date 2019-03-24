@@ -45,3 +45,12 @@ def get_specific_message(message_id):
         'data':msg,
         'status':200
     })
+
+@msg_api.route('/messages/unread', methods=['GET'])
+@jwt_required
+def get_all_unread():
+    unread = Message.get_unread_messages()
+    return jsonify({
+        'status':200,
+        'data':unread
+    })
