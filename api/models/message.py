@@ -41,6 +41,8 @@ class Message:
     def send_message(self):
         self.create_message()
 
+        Message.update_message_status(self.id,'sent')
+
         self.sentMessages.append({
 			'sender_id': User.get_user_id(self.sender_id),
 			'message_id':self.id,
