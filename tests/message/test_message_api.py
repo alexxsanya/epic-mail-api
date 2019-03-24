@@ -2,7 +2,7 @@ import pytest
 from flask import url_for
 import json,jwt
 from api import app
-from api.models import User
+from api.models import Message
 
 @pytest.fixture     
 def user_token(client): 
@@ -138,3 +138,33 @@ class TestGetAllSentAPI:
         response = client.get('api/v1/messages/sent',
             headers=dict(Authorization='Bearer ' + token)) 
         assert response.status_code == 200         
+
+class TestDeleteMessageAPI: 
+    message = {
+                "subject":"Hey Brain",
+                "reciever":"alex@epicmail.com",
+                "sender":"alex@epicmail.com",
+                "msgBody":"I juest wanted to say hello to you"
+    } 
+
+    def test_message_sent_with_correct_fields(self,client,user_token):
+        token = user_token
+        client.post(
+            url_for('msg_api.send_message'),
+            json=self.message,
+            content_type='application/json',
+            headers=dict(Authorization='Bearer ' + token))
+
+    def test_delete_message_with_non_message(self,client,user_token):
+        token = user_token
+        response = client.delete(
+            '/api/v1/messages/2',
+            headers=dict(Authorization='Bearer ' + token)) 
+        assert b'No message with provided id ' in response.data  
+
+    def test_delete_my_message(self,client,user_token):
+        token = user_token
+        response = client.delete(
+            '/api/v1/messages/1',
+            headers=dict(Authorization='Bearer ' + token)) 
+        assert b'has been deleted' in response.data  
