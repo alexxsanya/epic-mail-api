@@ -99,7 +99,7 @@ class Message:
     def get_sent_messages():
         sender_id = get_jwt_identity()
         s_msgs = [msg for msg in Message.sentMessages \
-                    if sender_id in msg['sender_id']]
+                    if sender_id == msg['sender_id']]
 
         sent_msg_db = []
 
