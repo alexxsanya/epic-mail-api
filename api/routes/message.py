@@ -1,9 +1,14 @@
 from flask import Blueprint,jsonify, request, Response
 from api.models import Message
 from api.util import MessageValidator
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity
+)
 msg_api = Blueprint("msg_api", __name__)
 
 @msg_api.route('/messages',methods=['POST'])
+@jwt_required
 def send_message():
     msg = request.get_json()
     if not msg: 
@@ -22,16 +27,16 @@ def send_message():
         ).send_message()
 
 @msg_api.route('/messages',methods=['GET'])
-
+@jwt_required
 def get_all_recieved():
-    received = Message.get_received_messages(1)
+    received = Message.get_received_messages()
     return jsonify({
         'data': received,
         'status':200
     })
 
 @msg_api.route('/messages/<int:message_id>')
-
+@jwt_required
 def get_specific_message(message_id):
 
     msg = Message.get_one_message(message_id)

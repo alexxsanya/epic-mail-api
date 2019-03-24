@@ -1,6 +1,10 @@
 import datetime
 from flask import abort, make_response, jsonify
 from .user import User
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity
+)
 class Message:
 
     messages = []
@@ -64,7 +68,8 @@ class Message:
         }))
 
     @staticmethod
-    def get_received_messages(reciever_id):
+    def get_received_messages():
+        reciever_id = get_jwt_identity()
         r_msgs = [msg for msg in Message.receivedMessages \
                     if reciever_id == msg['reciever_id']]
 
@@ -85,13 +90,14 @@ class Message:
         return r_msg_db
 
     @staticmethod
-    def get_unread_messages(reciever_id):
-        r_msgs = Message.get_received_messages(reciever_id)
+    def get_unread_messages():
+        r_msgs = Message.get_received_messages()
         unread_msg = [msg for msg in r_msgs if msg['status']=='unread']
         return unread_msg
 
     @staticmethod
-    def get_sent_messages(sender_id):
+    def get_sent_messages():
+        sender_id = get_jwt_identity()
         s_msgs = [msg for msg in Message.sentMessages \
                     if sender_id in msg['sender_id']]
 
