@@ -1,52 +1,95 @@
 # EPIC MAIL API
 
 ## Project Status
-[![Build Status](https://travis-ci.org/alexxsanya/EPIC-MAIL-API.svg?branch=ft-as_user_can_create_account-164792652)](https://travis-ci.org/alexxsanya/EPIC-MAIL-API)
-[![Coverage Status](https://coveralls.io/repos/github/alexxsanya/EPIC-MAIL-API/badge.svg?branch=ft-as_user_can_create_account-164792652)](https://coveralls.io/github/alexxsanya/EPIC-MAIL-API?branch=ft-as_user_can_create_account-164792652)
+[![Build Status](https://travis-ci.org/alexxsanya/EPIC-MAIL-API.svg?branch=ft-api_documentation-164868406)](https://travis-ci.org/alexxsanya/EPIC-MAIL-API)
+[![Coverage Status](https://coveralls.io/repos/github/alexxsanya/EPIC-MAIL-API/badge.svg?branch=ft-api_documentation-164868406)](https://coveralls.io/github/alexxsanya/EPIC-MAIL-API?branch=ft-as_user_can_create_account-164792652)
 
 ## Project Overview
 
-The internet is increasingly becoming an integral part of lives. Ever since the invention of [electronic mail](https://en.wikipedia.org/wiki/Email) by [Ray Tomlinson](https://en.wikipedia.org/wiki/Ray_Tomlinson), emails have grown to become the primary medium of exchanging information over the internet between two or more people, until the advent of Instant Messaging (IM) Apps.
+EPICMAIL is an online system which enables you to exchange messages/information over the internet
 
-As EPIC Andelan who work towards advancing human potential and giving back to the society, we wish to empower others by building a web app that helps people exchange messages/information over the internet.
 
-## EPIC Mail APIs
 
-This project will define the following APIs below
+## Getting started
 
-- Create a user account.
+### Prerequisites
 
-- Sign in a user.
+You will need the following software running on your machine to get started
 
-- Get all received emails for a user.
+* Python 3.6  - ( [download python](https://www.python.org/getit/) )
 
-- Get all unread emails for a user.
+* pip ([download pip](https://pip.pypa.io/en/stable/reference/pip_download/))
 
-- Get all emails sent by a user.
 
-- Get a specific user’s email.
+### Technologies
 
-- Send email to individuals**.**
+Flask (Python framework) -
 
-- Delete an email in a user’s inbox.
+Pytest (Python testing framework)
 
-  
+Pylint (Bug and quality checker for the Python programming language)
 
-## HTTP Verbs
+### Project Setup
+These are the steps on how to get the application running on your machine
 
-HTTP verbs, or methods, should be used in compliance with their definitions under the [HTTP/1.1](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) standard.
-The action taken on the representation will be contextual to the media type being worked on and its current state. Here's an example of how HTTP verbs map to create, read, update, delete operations in a particular context:
+ - In your terminal, cd to where you want to create your repository
 
-| HTTP METHOD      | POST                | GET                       | PUT            | DELETE         |
-| ---------------- | ------------------- | ------------------------- | -------------- | -------------- |
-| CRUD OP          | CREATE              | READ                      | UPDATE         | DELETE         |
-| /auth/signup     | Create User Account |                           |                |                |
-| /auth/login      | Login User          |                           |                |                |
-| /messages        | Create a Message    | Get all received messages |                |                |
-| /messages/unread |                     | Get all unread messages   |                |                |
-| /messages/sent   |                     | Get all sent messages     |                |                |
-| /message/<id>    |                     | get single message        | update message | delete message |
-|                  |                     |                           |                |                |
+- Clone the project repo
+```
+$ git clone https://github.com/alexxsanya/EPIC-MAIL-API.git
+```
+
+- Install a virtual environment via pip
+``` 
+$ pip install virtualenv 
+```
+
+- Create a virtual environment
+```
+$ virtualenv venv
+```
+- Activate the virtual environment
+```
+$ EPIC-MAIL-API/venv/scripts/activate
+```
+
+- Install project dependencies 
+
+```
+$ pip install -r requirements.txt
+```
+
+### Run the app locally
+
+- Run the app locally with the command
+
+```
+$ python app.py
+```
+
+## Tests coverage:
+
+*  Run this command in the project directory.
+  ``` pytest --cov=api```
+
+
+
+## API
+
+All APIs are prefixed with  `/api/v1`
+
+| VERB   | API                    | ACTION                    |
+| ------ | ---------------------- | ------------------------- |
+| POST   | /auth/signup           | Create User Account       |
+| POST   | /auth/login            | Login user                |
+| POST   | /messages              | Creates a Message         |
+| GET    | /messages              | Get all received messages |
+| GET    | /messages/unread       | Get all unread messages   |
+| GET    | /messages/sent         | Get all sent messages     |
+| GET    | /messages/<message-id> | Get specific message      |
+| DELETE | /messages/<message-id> | Delete message            |
+
+
 
 ## Responses
 
@@ -125,7 +168,7 @@ Response body:
 
 ### POST /messages
 
-Request body:
+hRequest body:
 
 ```json
 {
@@ -140,3 +183,12 @@ Request body:
 }
 
 ```
+
+
+
+## Deployment
+
+*  [Heroku](https://api-epicmail.herokuapp.com/api/v1/)
+*  [API Documentation](https://api-epicmail.herokuapp.com/api/v1/doc)
+*  [Front-end](https://alexxsanya.github.io/EPIC-MAIL/UI/login.html)
+
