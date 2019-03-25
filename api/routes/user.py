@@ -1,4 +1,4 @@
-from flask import Blueprint,jsonify, request, Response
+from flask import Blueprint,jsonify, request, Response, redirect
 from api.models import User
 from api.util import UserValidator
 user_api = Blueprint("user_api", __name__)
@@ -28,3 +28,8 @@ def login():
             'error':'No user with supplied password or email address',
             'status':400,
         })
+
+@user_api.route('/doc')
+def get_api_doc():
+
+    return redirect("https://epicmailapi.docs.apiary.io")
