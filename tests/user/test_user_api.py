@@ -4,6 +4,9 @@ from api import app
 from api.models import User
 class TestAuth():
     valid_token = None
+    def test_api_to_doc(self,client):
+        response = client.get('api/v1/doc')
+        assert response.status_code == 302    
 
 class TestUserSignupAPI:  
     
