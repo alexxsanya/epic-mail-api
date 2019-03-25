@@ -1,20 +1,7 @@
 import pytest
 from flask import url_for
-import json,jwt
 from api import app
 from api.models import Message
-
-@pytest.fixture     
-def user_token(client): 
-    response = client.post('/api/v1/auth/login', 
-                    content_type='application/json', 
-                    json={
-                        "email" : "alex@epicmail.com",
-                        "password": "Alex@11",
-                    })
-    access_token = json.loads(response.data.decode())
-    access_token = access_token['data'][0]['token']
-    return access_token
 
 class TestMessageAPI:
     
