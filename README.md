@@ -2,7 +2,7 @@
 
 ## Project Status
 [![Build Status](https://travis-ci.org/alexxsanya/EPIC-MAIL-API.svg?branch=ft-api_documentation-164868406)](https://travis-ci.org/alexxsanya/EPIC-MAIL-API)
-[![Coverage Status](https://coveralls.io/repos/github/alexxsanya/EPIC-MAIL-API/badge.svg?branch=ft-api_documentation-164868406)](https://coveralls.io/github/alexxsanya/EPIC-MAIL-API?branch=ft-as_user_can_create_account-164792652)
+[![Coverage Status](https://coveralls.io/repos/github/alexxsanya/EPIC-MAIL-API/badge.svg?branch=ft-api_documentation-164868406)](https://coveralls.io/github/alexxsanya/EPIC-MAIL-API?branch=ft-api_documentation-164868406)
 
 ## Project Overview
 
@@ -98,7 +98,7 @@ All APIs are prefixed with  `/api/v1`
 ```json
 {
   "status" : 200, 
-  "data" : {...}
+  "data" : { }
 }
 
 ```
@@ -127,20 +127,20 @@ Response body:
 
 ```json
 {
-  "status" : Integer, 
+  "status" : "Integer", 
   "data" : [
     {
-      "id" : Integer, 
-      "createdOn" : DateTime,
-      "subject" : String,
-      "message" : String,
-      "senderId" : Integer,
-      "receiverId" : Integer,
-      "parentMessageId" : Integer,
-      "status" : String,
+      "id" : "Integer", 
+      "createdOn" : "DateTime",
+      "subject" : "String",
+      "message" : "String",
+      "senderId" : "Integer",
+      "receiverId" : "Integer",
+      "parentMessageId" : "Integer",
+      "status" : "String",
     }, 
-    {....},
-    {....},
+    { },
+    { },
     ]
  }
 ```
@@ -151,16 +151,16 @@ Response body:
 
 ```json
 {
-  "status" : Integer, 
+  "status" : "Integer", 
   "data" : [{
-      "id" : Integer, 
-      "createdOn" : DateTime,
-      "subject" : String,
-      "message" : String,
-      "senderId" : Integer,
-      "receiverId" : Integer,
-      "parentMessageId" : Integer,
-      "status" : String,
+      "id" : "Integer", 
+      "createdOn" : "DateTime",
+      "subject" : "String",
+      "message" : "String",
+      "senderId" : "Integer",
+      "receiverId" : "Integer",
+      "parentMessageId" : "Integer",
+      "status" : "String",
   }]
 }
 
@@ -168,17 +168,17 @@ Response body:
 
 ### POST /messages
 
-hRequest body:
+Request body:
 
 ```json
 {
-  "status" : Integer, 
+  "status" : "Integer", 
   "data" : [{
-     "createdOn" : DateTime,        
-     "subject" : String,
-     "message" : String,
-     "parentMessageId" : Integer,
-     "status" : String,
+     "createdOn" : "DateTime",        
+     "subject" : "String",
+     "message" : "String",
+     "parentMessageId" : "Integer",
+     "status" : "String",
   }]
 }
 
