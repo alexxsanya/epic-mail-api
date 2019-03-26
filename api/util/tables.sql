@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users
         lastname VARCHAR(15) NOT NULL UNIQUE,
         email VARCHAR(50) UNIQUE NOT NULL,
         recoveryEmail VARCHAR(50) UNIQUE NOT NULL,
-        password VARCHAR(150) NOT NULL)
+        password VARCHAR(150) NOT NULL,
         createdOn TIMESTAMP DEFAULT NOW()
     );
  
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS messages_received
         receiverId INT NOT NULL UNIQUE,
         createOn TIMESTAMP DEFAULT NOW(),
         FOREIGN KEY (messageId) REFERENCES messages (id),
-        FOREIGN KEY (senderId) REFERENCES users (id)
+        FOREIGN KEY (receiverId) REFERENCES users (id)
     );
 
 CREATE TABLE IF NOT EXISTS groups
