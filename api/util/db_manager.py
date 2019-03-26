@@ -1,5 +1,6 @@
 import psycopg2
 from config import app_config
+from psycopg2.extras import RealDictCursor
 
 class DB_Manager:
 
@@ -10,7 +11,9 @@ class DB_Manager:
     def run_query(self,query,query_option="default"):
         try:
             self.conn = psycopg2.connect(app_config[self.app_env].DATABASE_URL)
-            cur = self.conn.cursor()
+            
+            self.conn.autocommit = True
+            cur = self.conn.cursor(cursor_factory=RealDictCursor)
             cur.execute(query)
             
             option = {
@@ -19,20 +22,17 @@ class DB_Manager:
                 'fetch_one': cur.fetchone(),
             }
 
-            cur.close
-
             return option.get(query_option, "Invalid Option")
 
         except psycopg2.DatabaseError as error:
             return error
 
-    def create_table(self):
+    def create_tables(self):
 
-        sql_file = open('api/tables.sql','r') 
+        sql_file = open('api/util/tables.sql','r') 
         
         self.run_query(query=sql_file.read())
 
-        self.conn.commit()
         self.conn.close()
 
     def drop_tables(self):
@@ -42,6 +42,6 @@ class DB_Manager:
                             groups, group_users;
                 """ 
         self.run_query(query)
-        self.conn.commit()
+
         self.conn.close()
 
