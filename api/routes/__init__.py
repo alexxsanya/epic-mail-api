@@ -6,8 +6,17 @@ from flask_jwt_extended import (
     create_access_token, 
     get_jwt_claims, decode_token)
 
-app = Flask(__name__)
-app.config['JWT_SECRET_KEY'] = 'my_secrete_key'
-jwt = JWTManager(app)
-app.register_blueprint(user_api, url_prefix="/api/v1")
-app.register_blueprint(msg_api,url_prefix="/api/v1")
+from config import app_config
+
+from api.util import DB_Manager
+
+def create_app(app_env):
+
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_object(app_config[str(app_env)])
+    JWTManager(app)
+    DB_Manager(app_env).create_tables()
+    app.register_blueprint(user_api, url_prefix="/api/v1")
+    app.register_blueprint(msg_api,url_prefix="/api/v1")
+
+    return app
