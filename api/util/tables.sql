@@ -12,9 +12,9 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS messages
     (
         id SERIAL PRIMARY KEY,
-        subject VARCHAR(15) NOT NULL,
-        msgBody VARCHAR(15) NOT NULL,
-        parentId INT UNIQUE NOT NULL,
+        subject VARCHAR(255) NOT NULL,
+        msgBody TEXT NOT NULL,
+        parentId INT NOT NULL,
         status VARCHAR(50) NOT NULL,
         createdOn TIMESTAMP DEFAULT NOW(),
         createdBy INT NOT NULL,
@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS messages_received
 CREATE TABLE IF NOT EXISTS groups
     (
         id SERIAL PRIMARY KEY,
-        name VARCHAR(25) NOT NULL UNIQUE,
-        role VARCHAR(25) NOT NULL UNIQUE,
+        name VARCHAR(50) NOT NULL UNIQUE,
+        role VARCHAR(50) NOT NULL UNIQUE,
         createOn TIMESTAMP DEFAULT NOW()
     );
 
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS group_users
     (
         groupId INT NOT NULL,
         userId INT NOT NULL,
-        userRole VARCHAR(25) NOT NULL,
+        userRole VARCHAR(100) NOT NULL,
         createOn TIMESTAMP DEFAULT NOW(),
         FOREIGN KEY (userId) REFERENCES users (id),
         FOREIGN KEY (groupId) REFERENCES groups (id)
