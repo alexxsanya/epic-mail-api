@@ -28,3 +28,10 @@ def create_group():
 def get_groups():
     return Group().get_groups()
 
+@g_api.route('/groups/<int:group_id>/<string:name>',methods=['PATCH'])
+@jwt_required
+def upfate_group_name(group_id,name):
+        return Group(
+            group_id=group_id,
+            name=name
+        ).update_group_name()

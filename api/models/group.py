@@ -15,9 +15,10 @@ class Group:
             environ.get("APP_SETTING",'development')
         ) 
 
-    def __init__( self,name='',role=''):
+    def __init__( self,name='',role='',group_id=0):
         self.name = name
         self.role = role
+        self.group_id = group_id
         self.user_id = get_jwt_identity()
 
     def create_group(self):
@@ -63,3 +64,16 @@ class Group:
             'status':200,
             'data': groups
         })
+
+    def update_group_name(self):
+        query = """
+                UPDATE groups 
+                SET name = '{}' 
+                WHERE id ={} RETURNING *
+                """.format(self.name,self.group_id)
+        new_group = self.db.run_query(query,'fetch_all')    
+
+        return jsonify({
+            'status':200,
+            'data': new_group
+        })        
