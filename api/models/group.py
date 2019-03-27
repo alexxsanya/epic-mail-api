@@ -51,3 +51,15 @@ class Group:
         if result == []:
             return False
         return True
+
+    def get_groups(self):
+        query = """
+                SELECT * FROM groups
+                    WHERE createdby={}
+                """.format(self.user_id)
+        groups = self.db.run_query(query,'fetch_all')
+
+        return jsonify({
+            'status':200,
+            'data': groups
+        })

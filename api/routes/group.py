@@ -7,7 +7,7 @@ from flask_jwt_extended import (
 )
 g_api = Blueprint("g_api", __name__)
 
-@g_api.route('/group',methods=['POST'])
+@g_api.route('/groups',methods=['POST'])
 @jwt_required
 def create_group():
     group = request.get_json()
@@ -23,3 +23,8 @@ def create_group():
               role=group.get('role')
             ).create_group()
     
+@g_api.route('/groups',methods=['GET'])
+@jwt_required
+def get_groups():
+    return Group().get_groups()
+
