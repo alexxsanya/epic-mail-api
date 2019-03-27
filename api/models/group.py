@@ -88,3 +88,56 @@ class Group:
             'status':200,
             'message': "message id {} deleted".format(self.group_id)
         }) 
+
+    @staticmethod
+    def group_exists(id):
+        query = f"""
+                    SELECT id FROM groups WHERE
+                        id = '{id}';
+                """
+        result = Group.db.run_query(query,query_option='fetch_all')
+
+        if result != []:
+            return True
+        return abort({
+            "error":400,
+            "message":"Group with id-{} doesn'\t exist".format(id)
+        })
+
+    @staticmethod
+    def is_group_owner(user_id,group_id):
+        query = """
+                SELECT id FROM groups
+                    WHERE createdby = {} AND
+                    id = {}
+                """.format(user_id, group_id)
+        rows = Group.db.run_query(query,'fetch_all')
+        
+        if len(rows) == 1:
+            return True
+        abort(jsonify({
+            "error":400,
+            "message":"Have no rights to add to this group"
+        }))     
+
+    @staticmethod
+    def add_user_to_group(user_id,group_id,user_role):
+        c_user = get_jwt_identity()
+        if User.check_user_id(user_id) and \
+            Group.group_exists(group_id) and\
+            Group.is_group_owner(c_user,group_id):
+            query = """
+                    INSERT INTO group_users (
+                        groupid,
+                        userid,
+                        userrole
+                    ) VALUES ({},{},'{}') RETURNING *
+                    """.format(
+                        user_id, group_id, user_role
+                    )
+            ad = Group.db.run_query(query,'fetch_all')
+            
+            return jsonify({
+                'status':200,
+                'data':ad
+            })

@@ -31,7 +31,7 @@ def get_groups():
 @g_api.route('/groups/<int:group_id>/<string:name>',methods=['PATCH'])
 @jwt_required
 def upfate_group_name(group_id,name):
-        return Group(
+    return Group(
             group_id=group_id,
             name=name
         ).update_group_name()
@@ -39,6 +39,16 @@ def upfate_group_name(group_id,name):
 @g_api.route('/groups/<int:group_id>',methods=['DELETE'])
 @jwt_required
 def delete_group(group_id):
-        return Group(
+    return Group(
             group_id=group_id
         ).delete_group()
+
+@g_api.route('/groups/<int:group_id>/users',methods=['POST'])
+@jwt_required
+def add_user_to_group(group_id):
+    user = request.get_json()
+    return Group.add_user_to_group(
+        user_id = user.get('user_id'),
+        user_role = user.get('user_role'),
+        group_id = group_id
+    )
