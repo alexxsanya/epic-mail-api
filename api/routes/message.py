@@ -22,7 +22,7 @@ def send_message():
             subject = msg.get('subject',None),
             msgBody= msg.get('msgBody',None),
 			parentId = msg.get('parentId',0),
-            reciever = msg.get('reciever',None)
+            reciever = msg.get('receiver',None)
         ).send_message()
 
 @msg_api.route('/messages',methods=['GET'])
