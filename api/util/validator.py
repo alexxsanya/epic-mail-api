@@ -115,7 +115,7 @@ class MessageValidator():
             'msgBody':message.get('msgBody'),
 			'parentId':message.get('parentId'),
 			'status':message.get('status','draft'),
-            'reciever':message.get('reciever')
+            'receiver':message.get('receiver')
         }
         MessageValidator.message_object = message
 
@@ -133,7 +133,7 @@ class MessageValidator():
 
     def validate_receiver(self):
         UserValidator.is_email_valid(\
-            self.message_object.get('reciever'))
+            self.message_object.get('receiver'))
 
     def validate_subject(self):
         MessageValidator.is_attr_none(\
