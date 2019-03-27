@@ -6,7 +6,7 @@ class TestMessageAPI:
     
     message = {
                 "subject":"Hey Brain",
-                "reciever":"alex@epicmail.com",
+                "receiver":"alex@epicmail.com",
                 "sender":"steven@epicmail.com",
                 "msgBody":"I juest wanted to say hello to you"
             } 
@@ -53,8 +53,7 @@ class TestMessageAPI:
         assert b'not an acceptable status' in response.data 
     
     def test_message_sent_with_correct_sender_receiver_bt_in_sys(self,client,user_token):
-        self.message['reciever'] = 'alex@gmail.com'
-        self.message['sender'] = 'david@gmail.com'
+        self.message['receiver'] = 'alexx@epicmail.com'
         self.message['status'] = 'draft'
         token = user_token
         response = client.post(
@@ -62,7 +61,7 @@ class TestMessageAPI:
             json=self.message,
             content_type='application/json',
             headers=dict(Authorization='Bearer ' + token))
-        assert b'user david@gmail.com doesn\'t exist' in response.data 
+        assert b'user alexx@epicmail.com doesn\'t exist' in response.data 
 
     def test_api_with_no_requester_body(self,client,user_token):
         token = user_token
@@ -85,7 +84,7 @@ class TestRecievedAPI:
 class TestGetSingleMessageAPI:
     message = {
                 "subject":"Hey Alex",
-                "reciever":"alex@epicmail.com",
+                "receiver":"alex@epicmail.com",
                 "sender":"steven@epicmail.com",
                 "msgBody":"Testing if you can get this message"
             } 
@@ -128,7 +127,7 @@ class TestGetAllSentAPI:
 class TestDeleteMessageAPI: 
     message = {
                 "subject":"Hey Brain",
-                "reciever":"alex@epicmail.com",
+                "receiver":"alex@epicmail.com",
                 "sender":"alex@epicmail.com",
                 "msgBody":"I juest wanted to say hello to you"
     } 
@@ -147,10 +146,3 @@ class TestDeleteMessageAPI:
             '/api/v1/messages/2',
             headers=dict(Authorization='Bearer ' + token)) 
         assert b'No message with provided id ' in response.data  
-
-    def test_delete_my_message(self,client,user_token):
-        token = user_token
-        response = client.delete(
-            '/api/v1/messages/1',
-            headers=dict(Authorization='Bearer ' + token)) 
-        assert b'has been deleted' in response.data  

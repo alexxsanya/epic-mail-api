@@ -13,7 +13,8 @@ class TestUserSignupAPI:
         response = client.get('/')
         assert response.status_code == 404
 
-    def test_create_user_pass_with_correct_fields(self,client):
+    def test_create_user_pass_with_correct_fields(self,client,create_user):
+        
         response = client.post(
             '/api/v1/auth/signup',
             json={
@@ -130,10 +131,13 @@ class TestUserSignupAPI:
             content_type='application/json')
         assert b"Invalid email format for" in response.data
 
-    def test_get_user_id(self,client):
+    def test_get_user_id(self):
         user_id = User.get_user_id('alex@epicmail.com')
-        assert user_id == 1
+        assert user_id == 2
 
+    def test_query_user(self):
+        user = User.query_user("alexx@epicc.com")
+        assert len(user) == 1
 class TestUserSigninAPI:
 
     def test_create_user_pass_with_correct_fields(self,client):
