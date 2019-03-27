@@ -134,10 +134,6 @@ class MessageValidator():
     def validate_receiver(self):
         UserValidator.is_email_valid(\
             self.message_object.get('reciever'))
-    
-    def validate_sender(self):
-        UserValidator.is_email_valid(\
-            self.message_object.get('sender'))
 
     def validate_subject(self):
         MessageValidator.is_attr_none(\
