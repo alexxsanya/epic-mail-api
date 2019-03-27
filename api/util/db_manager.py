@@ -21,7 +21,8 @@ class DB_Manager:
                 'fetch_all': cur.fetchall(),
                 'fetch_one': cur.fetchone(),
             }
-
+            cur.close()
+            print(cur.statusmessage)
             return option.get(query_option, "Invalid Option")
 
         except psycopg2.DatabaseError as error:
@@ -37,7 +38,7 @@ class DB_Manager:
 
     def drop_tables(self):
         query = """
-                DROP TABLES users, messages,
+                DROP TABLE users, messages,
                             messages_sent, messages_received,
                             groups, group_users;
                 """ 
