@@ -1,6 +1,5 @@
 import pytest
 from flask import url_for
-from api import app
 from api.models import Message
 
 class TestMessageAPI:

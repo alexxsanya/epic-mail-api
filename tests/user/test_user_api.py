@@ -1,6 +1,5 @@
 import pytest
 import json,jwt
-from api import app
 from api.models import User
 class TestAuth():
     valid_token = None
