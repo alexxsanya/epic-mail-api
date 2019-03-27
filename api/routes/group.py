@@ -35,3 +35,10 @@ def upfate_group_name(group_id,name):
             group_id=group_id,
             name=name
         ).update_group_name()
+
+@g_api.route('/groups/<int:group_id>',methods=['DELETE'])
+@jwt_required
+def delete_group(group_id):
+        return Group(
+            group_id=group_id
+        ).delete_group()

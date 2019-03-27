@@ -77,3 +77,14 @@ class Group:
             'status':200,
             'data': new_group
         })        
+
+    def delete_group(self):
+        query = """
+                    DELETE FROM groups 
+                        WHERE id={} RETURNING *
+                """.format(self.group_id)
+        self.db.run_query(query,'fetch_all')        
+        return jsonify({
+            'status':200,
+            'message': "message id {} deleted".format(self.group_id)
+        }) 
