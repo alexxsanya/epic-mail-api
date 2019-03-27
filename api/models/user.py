@@ -70,9 +70,24 @@ class User():
                         email = '{email}';
                 """
         result = User.db.run_query(query,query_option='fetch_all')
-        print('--> {}'.format(result))
+
         if result != []:
             return True
+
+    @staticmethod
+    def check_user_id(id):
+        query = f"""
+                    SELECT id FROM users WHERE
+                        id = {id};
+                """
+        result = User.db.run_query(query,query_option='fetch_all')
+
+        if result != []:
+            return True
+        abort(jsonify({
+            "error":400,
+            "message":"User with id-{} doesn'\t exist".format(id)
+        }))
 
     @staticmethod
     def query_user(email):
