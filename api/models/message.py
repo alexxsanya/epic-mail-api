@@ -5,19 +5,22 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity
 )
+
+from api.util import DB_Manager
+from os import environ 
+
 class Message:
 
-    messages = []
-    receivedMessages = []
-    sentMessages = []
+    db = DB_Manager(
+            environ.get("APP_SETTING",'development')
+        ) 
 
     def __init__(   self,
                     subject='',
                     msgBody='',
                     status="draft",
                     createdOn=None,
-                    reciever=0,
-                    sender=0,
+                    receiver=0,
                     id = 0,
                     parentId=0,
                 ):
@@ -27,104 +30,173 @@ class Message:
         self.msgBody = msgBody
         self.parentId = parentId
         self.status = status
-        self.reciever_id = reciever
-        self.sender_id = sender
+        self.receiver_id = receiver
+        self.sender_id = get_jwt_identity()
 
     def create_message(self):
-        self.id = len(self.messages)+1
-        self.createdOn = datetime.datetime.now().timestamp()
-        self.messages.append({
-			'id': self.id,
-			'createdOn': str(self.createdOn),
-			'subject':self.subject,
-            'msgBody':self.msgBody,
-			'parentId':self.parentId,
-			'status':self.status
-        })
+        if self.parentId == None: self.parentId = 0
+        
+        query = """
+                INSERT INTO messages (
+                    subject,msgbody,
+                    parentid,status, 
+                    createdby
+                )
+                VALUES (
+                    '{}', '{}', {}, '{}', {}
+                    );
+                """.format( self.subject,
+                            self.msgBody, int(self.parentId),
+                            self.status,
+                            self.sender_id)
+
+        self.db.run_query(query) 
 
     def send_message(self):
         self.create_message()
 
-        Message.update_message_status(self.id,'sent')
+        message_id = self.get_message_id()
 
-        self.sentMessages.append({
-			'sender_id': User.get_user_id(self.sender_id),
-			'message_id':self.id,
-			'createdOn':self.createdOn
-		})
-        
-        self.receivedMessages.append({
-            'reciever_id':User.get_user_id(self.reciever_id),
-            'message_id':self.id,
-            'createdOn': self.createdOn
-        })
+        Message.update_message_status(message_id,'sent')
+
+        sent_q = """
+                INSERT INTO messages_sent (
+                    senderid,messageid
+                )
+                VALUES (
+                    '{}', '{}'
+                    );
+                """.format( self.sender_id,
+                            message_id)
+
+        rec_q = """
+                INSERT INTO messages_received (
+                    receiverid,messageid
+                )
+                VALUES (
+                    '{}', '{}'
+                    );
+                """.format( User.get_user_id(self.receiver_id)
+                            ,message_id)
+
+        self.db.run_query(sent_q)
+        self.db.run_query(rec_q)
 
         abort(jsonify({
             'status':201,
             'data':{
-                'message_id': self.id,
-                'message': 'Message successfully sent to {}'.format(self.reciever_id)
+                'message_id': message_id,
+                'message': 'Message successfully sent to {}'\
+                    .format(self.receiver_id)
             }
         }))
 
+    def get_message_id(self):
+        query = """
+                SELECT id FROM messages WHERE
+                    subject='{}' AND createdby='{}';
+                """.format( self.subject,
+                            self.sender_id
+                        )
+
+        message = self.db.run_query(query,'fetch_all')
+         
+        if message != []:
+            return message[0]['id']
+        abort(jsonify({
+            'status':400,
+            'error': 'No Message with subject {}'.format(self.subject)
+        }))   
+
+
     @staticmethod
     def get_received_messages():
-        reciever_id = get_jwt_identity()
-        r_msgs = [msg for msg in Message.receivedMessages \
-                    if reciever_id == msg['reciever_id']]
+        receiver_id = get_jwt_identity()
 
-        r_msg_db = []
+        received_log = Message.query_a_table('messages_received',
+                                             'receiverid',
+                                             receiver_id)
 
-        for msg in r_msgs:
+        recieved_db = []
+
+        for msg in received_log:
             
-            mgx = [m for m in Message.messages if msg['message_id'] == m['id']]
+            mgx = Message.query_a_table('messages','id',msg['messageid'])
             
             if(len(mgx)>0):
-                
-                sender = [m for m in Message.sentMessages if m['message_id']==reciever_id]
-                
-                mgx[0]['sender_id'] = sender[0]['sender_id']
-                
-                r_msg_db.append(mgx[0])
 
-        return r_msg_db
+                sender_log = Message.query_a_table('messages_sent',
+                                                'messageid',mgx[0]['id'])
+
+                mgx[0]['createdby'] = sender_log[0]['senderid']
+                
+                recieved_db.append(mgx[0])
+
+        return recieved_db
 
     @staticmethod
     def get_unread_messages():
         r_msgs = Message.get_received_messages()
+
         unread_msg = [msg for msg in r_msgs if msg['status']=='sent']
         return unread_msg
 
     @staticmethod
     def get_sent_messages():
         sender_id = get_jwt_identity()
-        s_msgs = [msg for msg in Message.sentMessages \
-                    if sender_id == msg['sender_id']]
 
+        sent_log = Message.query_a_table('messages_sent',
+                                            'senderid',
+                                            sender_id)
+        msg_db = Message.query_a_table('messages',
+                                        'createdby',
+                                        sender_id)
         sent_msg_db = []
 
-        for msg in s_msgs:
-            mgx = [m for m in Message.messages if msg['message_id'] == m['id']]
-            if(len(mgx)>0):
-                sent_msg_db.append(mgx[0])
+        for msg in sent_log:
+            mgx = [m for m in msg_db if m['id'] == msg['messageid']]
+            rec_log = Message.query_a_table('messages_received',
+                                        'messageid',
+                                        msg['messageid'])      
+            mgx[0]['receiverid'] = rec_log[0]['receiverid']      
+            sent_msg_db.append(mgx[0])
 
         return sent_msg_db      
 
+
     @staticmethod
     def update_message_status(msg_id,status):
-        msg = [m for m in Message.messages if m['id']==msg_id]
-        msg[0]['status'] = status
+        update_m = """
+                    UPDATE messages SET status='{}'
+                        WHERE id = {}
+                   """.format(status,msg_id)
+        Message.db.run_query(update_m)
+
 
     @staticmethod
     def get_one_message(msg_id):
+        c_user = get_jwt_identity()
         try: 
-            _msg = [m for m in Message.messages if m['id'] == msg_id]
-            sender = [s for s in Message.sentMessages if s['message_id'] == msg_id]
-            receiver = [r for r in Message.receivedMessages if r['message_id'] == msg_id]
-            _msg[0]['sender_id'] = sender[0]['sender_id']
-            _msg[0]['reciever_id'] = receiver[0]['reciever_id']
+            _msg = Message.query_a_table('messages',
+                                         'id',
+                                          msg_id)
+            _sender = Message.query_a_table('messages_sent',
+                                            'messageid',
+                                            msg_id)
+            _receiver = Message.query_a_table('messages_received',
+                                            'messageid',
+                                            msg_id)
+            _msg[0]['senderid'] = _sender[0]['senderid']
+            _msg[0]['receiverid'] = _receiver[0]['receiverid']
 
-            return _msg
+            if _msg[0]['receiverid'] == c_user or \
+                _msg[0]['senderid'] == c_user:
+                return _msg
+            
+            abort(jsonify({
+                'status': 403,
+                'error': 'access denied'
+               }))
             
         except IndexError:
             abort(jsonify({
@@ -135,21 +207,28 @@ class Message:
     def delete_message(self,msg_id):
         user_id = get_jwt_identity()
 
-        msg_item_record = [m for m in self.messages\
-                                if m['id'] == msg_id]
-        snt_item_record = [s for s in self.sentMessages\
-                                    if s['message_id'] == msg_id]
-        rec_item_record = [r for r in self.receivedMessages\
-                                    if r['message_id'] == msg_id]
-        if len(msg_item_record) > 0 and len(snt_item_record)\
-            and len(rec_item_record):
+        _msg = Message.query_a_table('messages',
+                                    'id',
+                                    msg_id)
+        _sender = Message.query_a_table('messages_sent',
+                                        'messageid',
+                                        msg_id)
+        _receiver = Message.query_a_table('messages_received',
+                                        'messageid',
+                                        msg_id)
+        if len(_msg) > 0 and len(_sender)\
+            and len(_receiver):
         
-            if user_id == snt_item_record[0]['sender_id'] or\
-                user_id == rec_item_record[0]['reciever_id']:
-                        
-                self.messages.remove(msg_item_record[0])
-                self.sentMessages.remove(snt_item_record[0])
-                self.receivedMessages.remove(rec_item_record[0])
+            if user_id == _sender[0]['senderid'] or\
+                user_id == _receiver[0]['receiverid']:
+
+                if user_id == _sender[0]['senderid']:
+                    a =Message.delete_from_table('messages_sent','messageid',
+                                                msg_id)
+                    print("deleted -> {}".format(a))
+                if user_id == _receiver[0]['receiverid']:
+                    Message.delete_from_table('messages_received','messageid',
+                                                msg_id)
 
                 abort(jsonify({
                     'status':200,
@@ -165,3 +244,19 @@ class Message:
             'status':204,
             'error':'No message with provided id - {} '.format(msg_id)
         }))
+
+    @staticmethod
+    def query_a_table(table,column,value):
+        msg_query = """
+                SELECT * FROM {} WHERE
+                    {}={};
+                """.format(table,column,value)
+        return Message.db.run_query(msg_query,'fetch_all')        
+
+    @staticmethod
+    def delete_from_table(table,column,value):
+        msg_query = """
+                DELETE FROM {} WHERE
+                    {}={};
+                """.format(table,column,value)
+        return Message.db.run_query(msg_query)  
