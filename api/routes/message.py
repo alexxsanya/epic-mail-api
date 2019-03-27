@@ -21,8 +21,7 @@ def send_message():
         Message(
             subject = msg.get('subject',None),
             msgBody= msg.get('msgBody',None),
-			parentId = msg.get('parentId',None),
-            sender = msg.get('sender',None),
+			parentId = msg.get('parentId',0),
             reciever = msg.get('reciever',None)
         ).send_message()
 
