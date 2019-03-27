@@ -10,7 +10,7 @@ services:
   - postgresql
 
 before_script:
-  - psql -c 'create database travis_epic_db;' -U postgres
+  - psql -c 'create database epic_db;' -U postgres
 
 addons:
   postgresql: "11"
@@ -18,7 +18,7 @@ addons:
 env:
   global:
     - APP_SETTING=staging
-    - DATABASE_URL=postgres://postgres:@localhost:5432/travis_epic_db
+    - DATABASE_URL=postgres://postgres:@localhost:5432/epic_db
 
 script:
   - pytest --cov=api
