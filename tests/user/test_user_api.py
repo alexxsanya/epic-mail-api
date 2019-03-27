@@ -135,14 +135,19 @@ class TestUserSignupAPI:
         assert user_id == 1
 
 class TestUserSigninAPI:
-    User.user_db.append({
-        'id':2183,
-        'email':'tests@epicmail.com',
-        'firstname':'Test User',
-        'lastname':'Test',
-        'password':'Test@123',
-        'recovery_email':'tests1@epicmail.com'
-    })
+
+    def test_create_user_pass_with_correct_fields(self,client):
+        response = client.post(
+            '/api/v1/auth/signup',
+            json={
+                'email':'tests@epicmail.com',
+                'firstname':'Test User',
+                'lastname':'Test',
+                'password':'Test@123',
+                'recovery_email':'tests1@epicmail.com'
+                },
+            content_type='application/json')
+        assert response.status_code == 200
     def test_login_pass_correct_cred(self,client):
         response = client.post(
             '/api/v1/auth/login',
