@@ -73,7 +73,6 @@ class User():
         print('--> {}'.format(result))
         if result != []:
             return True
-        return False
 
     @staticmethod
     def query_user(email):
