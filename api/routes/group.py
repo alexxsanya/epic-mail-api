@@ -61,3 +61,11 @@ def remove_user_from_group(group_id,user_id):
         group_id = group_id
     )
 
+@g_api.route('/groups/<int:group_id>/messages',methods=['POST'])
+@jwt_required
+def send_group_mail(group_id):
+    message = request.get_json()
+    return Group.send_group_email(
+        group_id,
+        **message
+    )

@@ -1,6 +1,7 @@
 import datetime
 from flask import abort, make_response, jsonify
 from .user import User
+from .message import Message
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity
@@ -146,10 +147,10 @@ class Group:
                         userrole
                     ) VALUES ({},{},'{}') RETURNING *
                     """.format(
-                        user_id, group_id, user_role
+                        group_id,user_id, user_role
                     )
             ad = Group.db.run_query(query,'fetch_all')
-            
+
             return jsonify({
                 'status':200,
                 'data':ad
@@ -159,7 +160,7 @@ class Group:
             "message":"User {} is already a member of group {}".format(
                     user_id,group_id )
         }))  
-        
+
     @staticmethod
     def remove_user(user_id,group_id):
         c_user = get_jwt_identity()
@@ -179,3 +180,60 @@ class Group:
                 'message':"user {} deleted from group {}".format(
                     user_id,group_id)
             })
+
+    @staticmethod
+    def get_group_members(group_id):
+        query = """
+                    SELECT userid FROM group_users
+                     WHERE groupid={}
+                """.format(group_id)
+        return Group.db.run_query(query,'fetch_all')
+
+    @staticmethod
+    def send_group_email(group_id,**msg):
+
+        if Group.group_exists(group_id):
+            group_members = Group.get_group_members(group_id)
+            
+            receiver = []
+            Message(
+                    subject = msg.get('subject',None),
+                    msgBody= msg.get('msgBody',None),
+                    parentId = msg.get('parentId',0),
+                    status='sent',
+                    is_group_mail = True,
+                    group_id=group_id
+                ).create_message()
+
+            query = """
+                    SELECT id FROM messages
+                        WHERE subject='{}' 
+                        AND isgroupmail={} AND
+                        createdby='{}'
+                """.format(msg.get('subject'),True,group_id)
+
+            message = Group.db.run_query(query,'fetch_all')
+            print(group_members)
+            msg_id = message[0]['id']
+
+            for member in group_members:
+
+                Message().receiver = member['userid']
+
+                Message.update_message_status(msg_id,'sent')
+
+                Message().log_in_messages_received(msg_id)
+
+                Message().log_in_messages_sent(msg_id)
+                
+                receiver.append(member)    
+
+            return jsonify({
+                'status':200,
+                'data':receiver
+            })
+        return jsonify({
+            'error':400,
+            'message':'No group with id - {}'.format(group_id)
+        })
+            
