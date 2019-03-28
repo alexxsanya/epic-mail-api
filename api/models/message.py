@@ -38,8 +38,9 @@ class Message:
         self.group_id = group_id
 
     def create_message(self):
+        createdby = self.sender_id
         if self.parentId == None: self.parentId = 0
-        
+        if self.is_group_mail: createdby = self.group_id
         query = """
                 INSERT INTO messages (
                     subject,msgbody,
@@ -52,7 +53,7 @@ class Message:
                 """.format( self.subject,
                             self.msgBody, int(self.parentId),
                             self.status,
-                            self.sender_id,
+                            createdby,
                             self.is_group_mail)
 
         self.db.run_query(query) 
@@ -66,7 +67,7 @@ class Message:
 
         self.log_in_messages_received(message_id)
 
-        self.log_in_messages_received(message_id)
+        self.log_in_messages_sent(message_id)
 
         return jsonify({
             'status':201,
@@ -90,6 +91,9 @@ class Message:
         self.db.run_query(sent_q)
     
     def log_in_messages_received(self,message_id):
+        receiver = self.receiver
+        if not isinstance(receiver,int):
+            receiver = User.get_user_id(self.receiver)
         rec_q = """
                 INSERT INTO messages_received (
                     receiverid,messageid
@@ -97,7 +101,7 @@ class Message:
                 VALUES (
                     '{}', '{}'
                     );
-                """.format( User.get_user_id(self.receiver)
+                """.format( receiver
                             ,message_id)
         
         self.db.run_query(rec_q)
