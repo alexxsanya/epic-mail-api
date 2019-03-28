@@ -18,7 +18,7 @@ def send_message():
         })
 
     if MessageValidator().validator(msg):
-        Message(
+        return Message(
             subject = msg.get('subject',None),
             msgBody= msg.get('msgBody',None),
 			parentId = msg.get('parentId',0),

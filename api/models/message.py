@@ -23,6 +23,8 @@ class Message:
                     receiver=0,
                     id = 0,
                     parentId=0,
+                    is_group_mail=False,
+                    group_id = 0
                 ):
         self.id = id,
         self.createdOn = createdOn
@@ -30,8 +32,10 @@ class Message:
         self.msgBody = msgBody
         self.parentId = parentId
         self.status = status
-        self.receiver_id = receiver
+        self.receiver = receiver
         self.sender_id = get_jwt_identity()
+        self.is_group_mail = is_group_mail
+        self.group_id = group_id
 
     def create_message(self):
         if self.parentId == None: self.parentId = 0
@@ -40,15 +44,16 @@ class Message:
                 INSERT INTO messages (
                     subject,msgbody,
                     parentid,status, 
-                    createdby
+                    createdby,isgroupmail
                 )
                 VALUES (
-                    '{}', '{}', {}, '{}', {}
+                    '{}', '{}', {}, '{}', {},{}
                     );
                 """.format( self.subject,
                             self.msgBody, int(self.parentId),
                             self.status,
-                            self.sender_id)
+                            self.sender_id,
+                            self.is_group_mail)
 
         self.db.run_query(query) 
 
@@ -59,6 +64,20 @@ class Message:
 
         Message.update_message_status(message_id,'sent')
 
+        self.log_in_messages_received(message_id)
+
+        self.log_in_messages_received(message_id)
+
+        return jsonify({
+            'status':201,
+            'data':{
+                'message_id': message_id,
+                'message': 'Message successfully sent to {}'\
+                    .format(self.receiver)
+            }
+        })
+        
+    def log_in_messages_sent(self,message_id):
         sent_q = """
                 INSERT INTO messages_sent (
                     senderid,messageid
@@ -68,7 +87,9 @@ class Message:
                     );
                 """.format( self.sender_id,
                             message_id)
-
+        self.db.run_query(sent_q)
+    
+    def log_in_messages_received(self,message_id):
         rec_q = """
                 INSERT INTO messages_received (
                     receiverid,messageid
@@ -76,20 +97,10 @@ class Message:
                 VALUES (
                     '{}', '{}'
                     );
-                """.format( User.get_user_id(self.receiver_id)
+                """.format( User.get_user_id(self.receiver)
                             ,message_id)
-
-        self.db.run_query(sent_q)
+        
         self.db.run_query(rec_q)
-
-        abort(jsonify({
-            'status':201,
-            'data':{
-                'message_id': message_id,
-                'message': 'Message successfully sent to {}'\
-                    .format(self.receiver_id)
-            }
-        }))
 
     def get_message_id(self):
         query = """
