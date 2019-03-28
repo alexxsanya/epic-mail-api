@@ -1,0 +1,19 @@
+language: python
+
+python:
+  - "3.6"
+
+install:
+  - pip install -r requirements.txt
+  
+script:
+  - pytest --cov=api
+  - coverage 
+  - coveralls    
+after_script:
+  - coveralls
+  - coverage 
+after_success:
+  - codecov
+  - coveralls
+  - coverage

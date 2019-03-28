@@ -1,0 +1,16 @@
+__pycache__/
+# Unit test / coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+.pytest_cache/
+# Environments
+.env
+.venv
+env/
+venv
+venv/
+ENV/
+.vscode
+
