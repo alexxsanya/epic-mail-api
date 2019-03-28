@@ -118,14 +118,27 @@ class Group:
         abort(jsonify({
             "error":400,
             "message":"Have no rights to add to this group"
-        }))     
+        }))    
+
+    @staticmethod
+    def is_user_a_member(user_id,group_id):
+        query = """
+                SELECT * FROM group_users
+                    WHERE userid={} AND
+                    groupid={}
+                """.format(user_id, group_id)
+        rows = Group.db.run_query(query,'fetch_all')
+        if len(rows) == 1:
+            return True
+        return False
 
     @staticmethod
     def add_user_to_group(user_id,group_id,user_role):
         c_user = get_jwt_identity()
         if User.check_user_id(user_id) and \
             Group.group_exists(group_id) and\
-            Group.is_group_owner(c_user,group_id):
+            Group.is_group_owner(c_user,group_id) and\
+            not Group.is_user_a_member(user_id,group_id):
             query = """
                     INSERT INTO group_users (
                         groupid,
@@ -140,4 +153,29 @@ class Group:
             return jsonify({
                 'status':200,
                 'data':ad
+            })
+        abort(jsonify({
+            "error":400,
+            "message":"User {} is already a member of group {}".format(
+                    user_id,group_id )
+        }))  
+        
+    @staticmethod
+    def remove_user(user_id,group_id):
+        c_user = get_jwt_identity()
+        if User.check_user_id(user_id) and \
+            Group.group_exists(group_id) and\
+            Group.is_group_owner(c_user,group_id):
+
+            query = """
+                DELETE FROM group_users
+                 WHERE groupid={} AND userid={}
+                 RETURNING *
+            """.format(group_id,user_id)   
+            Group.db.run_query(query,'fetch_all')    
+
+            return jsonify({
+                'status':200,
+                'message':"user {} deleted from group {}".format(
+                    user_id,group_id)
             })

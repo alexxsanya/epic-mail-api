@@ -52,3 +52,12 @@ def add_user_to_group(group_id):
         user_role = user.get('user_role'),
         group_id = group_id
     )
+
+@g_api.route('/groups/<int:group_id>/users/<int:user_id>',methods=['DELETE'])
+@jwt_required
+def remove_user_from_group(group_id,user_id):
+    return Group.remove_user(
+        user_id = user_id,
+        group_id = group_id
+    )
+
