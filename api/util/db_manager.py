@@ -7,10 +7,10 @@ class DB_Manager:
     def __init__(self,app_env):
         self.conn = None
         self.app_env = app_env
-
+        self.db_url = app_config[self.app_env].DATABASE_URL
     def run_query(self,query,query_option="default"):
         try:
-            self.conn = psycopg2.connect(app_config[self.app_env].DATABASE_URL)
+            self.conn = psycopg2.connect(self.db_url)
             
             self.conn.autocommit = True
             cur = self.conn.cursor(cursor_factory=RealDictCursor)
