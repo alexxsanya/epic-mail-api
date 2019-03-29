@@ -3,7 +3,7 @@ from os import environ
 class Config(object):
     DEBUG = False
     TESTING = False
-    DATABASE_URI = environ.get('DATABASE_URL')
+    DATABASE_URL = environ.get('DATABASE_URL')
     JWT_SECRET_KEY = environ.get('SECRET_KEY','secrete') 
 
 class ProductionConfig(Config):
