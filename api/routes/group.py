@@ -11,11 +11,6 @@ g_api = Blueprint("g_api", __name__)
 @jwt_required
 def create_group():
     group = request.get_json()
-    if not group: 
-        return jsonify({
-            'error':'Invalid Request Body',
-            'status': 400
-        })
 
     if GroupValidator().validator(**group):
         return Group(
