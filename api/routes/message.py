@@ -31,7 +31,8 @@ def get_all_recieved():
     received = Message.get_received_messages()
     return jsonify({
         'data': received,
-        'status':200
+        'status':200,
+        'info':'Messages successfully retrieved'
     })
 
 @msg_api.route('/messages/<int:message_id>')
@@ -42,7 +43,8 @@ def get_specific_message(message_id):
 
     return jsonify({
         'data':msg,
-        'status':200
+        'status':200,
+        'info':'Message successfully retrieved'
     })
 
 @msg_api.route('/messages/unread', methods=['GET'])
@@ -51,7 +53,8 @@ def get_all_unread():
     unread = Message.get_unread_messages()
     return jsonify({
         'status':200,
-        'data':unread
+        'data':unread,
+        'info':'Unread messages successfully retrieved'
     })
 
 @msg_api.route('/messages/sent',methods=['GET'])
@@ -61,7 +64,8 @@ def get_all_sent():
 
     return jsonify({
         'status':200,
-        'data':sent
+        'data':sent,
+        'info':'Sent messages successfully retrieved'
     })
 
 @msg_api.route('/messages/<int:message_id>', methods=['DELETE'])
