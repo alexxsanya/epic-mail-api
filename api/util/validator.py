@@ -103,8 +103,6 @@ class MessageValidator():
 
     message_object = None
 
-    acceptable_status = ('draft','sent','unread')
-
     def __init__ (self):
         pass
 
@@ -141,15 +139,7 @@ class MessageValidator():
 
     def validate_msgBody(self):
         MessageValidator.is_attr_none(\
-            self.message_object.get('msgBody'), 'Message Body')
-
-    def validate_status(self):
-        status = self.message_object.get('status')
-        if not status in self.acceptable_status:
-             abort(UserValidator().error_message(
-                error = "{} is not an acceptable status".format(status),
-                code = 400,
-            ))             
+            self.message_object.get('msgBody'), 'Message Body')           
 
     @staticmethod
     def is_attr_none(attr,field): 
