@@ -13,7 +13,7 @@ from os import environ
 class Group:
 
     db = DB_Manager(
-            environ.get("APP_SETTING",'development')
+            environ.get("APP_SETTING")
         ) 
 
     def __init__( self,name='',role='',group_id=0):
@@ -100,10 +100,7 @@ class Group:
 
         if result != []:
             return True
-        return abort({
-            "error":400,
-            "message":"Group with id-{} doesn'\t exist".format(id)
-        })
+        return False
 
     @staticmethod
     def is_group_owner(user_id,group_id):

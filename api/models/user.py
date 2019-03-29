@@ -12,7 +12,7 @@ from os import environ
 class User():
 
     db = DB_Manager(
-            environ.get("APP_SETTING",'development')
+            environ.get("APP_SETTING")
         ) 
     def __init__(self,email,firstname,lastname,password,recovery_email):
         self.id = id
