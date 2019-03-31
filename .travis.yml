@@ -5,7 +5,21 @@ python:
 
 install:
   - pip install -r requirements.txt
-  
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database epic_db;' -U postgres
+
+addons:
+  postgresql: "11"
+
+env:
+  global:
+    - APP_SETTING=staging
+    - DATABASE_URL=postgres://postgres:@localhost:5432/epic_db
+
 script:
   - pytest --cov=api
   - coverage 

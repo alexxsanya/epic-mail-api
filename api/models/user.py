@@ -5,25 +5,15 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, 
     create_access_token, 
     get_jwt_claims, decode_token)
-    
+
+from api.util import DB_Manager
+from os import environ 
+
 class User():
 
-    user_db = [{
-        'id':1,
-        'email':'alex@epicmail.com',
-        'lastname':'alex',
-        'firstname':'James',
-        'recovery_email':'james@gmail.com',
-        'password':'Alex@11'
-        },{
-        'id':2,
-        'email':'steven@epicmail.com',
-        'lastname':'steven',
-        'firstname':'walton',
-        'recovery_email':'walton@gmail.com',
-        'password':'Walton@2'            
-        }]
-
+    db = DB_Manager(
+            environ.get("APP_SETTING",'development')
+        ) 
     def __init__(self,email,firstname,lastname,password,recovery_email):
         self.id = id
         self.email = email
@@ -32,30 +22,41 @@ class User():
         self.password = password
         self.recovery_email = recovery_email
 
+
     def create_user(self):
-        if not self.user_exist(self.email):
-            self.id = len(self.user_db)+1
-            self.user_db.append({
-                'id':self.id,
-                'email':self.email,
-                'firstname':self.firstname,
-                'lastname':self.lastname,
-                'password':self.password,
-                'recovery_email':self.recovery_email
-            })            
-            token = create_access_token(identity=self.id)
-            return abort(
-                jsonify({
-                'status':201,
-                'data':[{
-                        'token':token,
-                        'user':{
-                            'id':self.id,
-                            'firstname':self.firstname
-                        } 
-                    }]
-                })
-            )
+        if not User.user_exist(self.email):
+            query = """
+                    INSERT INTO users (
+                            firstname,
+                            lastname,email,
+                            password, 
+                            recoveryemail
+                            )
+                            VALUES (
+                            '{}', '{}', '{}', '{}', '{}'
+                            );
+                    """.format(self.firstname,self.lastname,
+                                self.email, self.password,
+                                self.recovery_email)
+
+            self.db.run_query(query)
+
+            user = User.query_user(self.email)
+
+            if user != []:
+                token = create_access_token(identity=user[0].get('id'))
+                return abort(
+                    jsonify({
+                    'status':201,
+                    'data':[{
+                            'token':token,
+                            'user':{
+                                'id':user[0].get('id'),
+                                'firstname':user[0].get('firstname')
+                            } 
+                        }]
+                    })
+                )
         
         abort(jsonify({
             'status':400,
@@ -64,18 +65,35 @@ class User():
 
     @staticmethod
     def user_exist(email):
-        if email in str(User.user_db):
+        query = f"""
+                    SELECT email FROM users WHERE
+                        email = '{email}';
+                """
+        result = User.db.run_query(query,query_option='fetch_all')
+        print('--> {}'.format(result))
+        if result != []:
             return True
-        return False
+
+    @staticmethod
+    def query_user(email):
+        query = f"""
+                    SELECT * FROM users WHERE
+                        email = '{email}';
+                """
+        return User.db.run_query(query,query_option='fetch_all')    
+             
 
     @staticmethod
     def login_user(email,password):
          
         if ( UserValidator.is_email_valid(email) and \
                 UserValidator.is_pass_valid(password)):
+            query = f"""
+                        SELECT * FROM users WHERE
+                            email = '{email}';
+                    """
+            user =  User.db.run_query(query,query_option='fetch_all') 
 
-            user = [u for u in User.user_db if ((u['email'] == email) \
-                    and (u['password'] == password))]
             if len(user) == 1:
                 token = create_access_token(identity=user[0]['id'])
                 abort(
@@ -95,9 +113,16 @@ class User():
     @staticmethod
     def get_user_id(email):
         if UserValidator.is_email_valid(email):
-            user = [user for user in User.user_db if user['email'] == email]
+            
+            query = f"""
+                        SELECT id FROM users WHERE
+                            email = '{email}';
+                    """
+            user =  User.db.run_query(query,query_option='fetch_all')   
+
             if len(user) == 1:
                 return user[0]['id']
+
             abort(jsonify({
                 'status':'400',
                 'error':'user {} doesn\'t exist'.format(email)
