@@ -103,8 +103,6 @@ class MessageValidator():
 
     message_object = None
 
-    acceptable_status = ('draft','sent','unread')
-
     def __init__ (self):
         pass
 
@@ -141,15 +139,7 @@ class MessageValidator():
 
     def validate_msgBody(self):
         MessageValidator.is_attr_none(\
-            self.message_object.get('msgBody'), 'Message Body')
-
-    def validate_status(self):
-        status = self.message_object.get('status')
-        if not status in self.acceptable_status:
-             abort(UserValidator().error_message(
-                error = "{} is not an acceptable status".format(status),
-                code = 400,
-            ))             
+            self.message_object.get('msgBody'), 'Message Body')           
 
     @staticmethod
     def is_attr_none(attr,field): 
@@ -159,3 +149,49 @@ class MessageValidator():
                 'code':400,
                 'info':'atleast a 4 letter {}'.format(field)
              })) 
+
+class GroupValidator():
+
+    def __init__ (self):
+        self.group = {}
+
+    def validator(self,**kwags):
+        self.group = {
+            'name':kwags.get('name'),
+            'role':kwags.get('role')
+        }
+
+        for field in self.group: 
+            self.validate_group(field) 
+
+        return True
+
+    def validate_group(self,field):
+        method_name = 'validate_' + str(field)
+
+        method = getattr(self, method_name, lambda: "Invalid Field")
+        
+        return method()    
+    
+    def validate_name(self):
+        name = self.group.get('name')
+        name_regex = \
+            re.compile(r'''([a-zA-Z0-9._%+-]{4,50})''',\
+                re.VERBOSE)
+        valid_name = name_regex.search(name)
+        if valid_name:
+            return True
+        abort(jsonify({
+            'error':'Invalid name - {}'.format(name),
+            'info':"Name should at 4 char but not exceed 50",
+            'status':400,
+        }))
+
+    def validate_role(self):
+        role = self.group.get('role')
+        if len(role)>10:
+            return True
+        abort(jsonify({
+            'error':"Role should be atleast 10 char but not exceed 50",
+            'status':400,
+        }))

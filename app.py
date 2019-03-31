@@ -1,7 +1,7 @@
 from api import create_app
 from os import environ
 
-config_name = environ.get("APP_SETTING",'development')
+config_name = environ.get("APP_SETTING")
 
 app = create_app(config_name)
     
