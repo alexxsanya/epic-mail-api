@@ -2,22 +2,24 @@ import psycopg2
 from config import app_config
 from psycopg2.extras import RealDictCursor
 
+
 class DB_Manager:
 
-    def __init__(self,app_env):
+    def __init__(self, app_env):
         self.conn = None
         self.app_env = app_env
         self.db_url = app_config[self.app_env].DATABASE_URL
-    def run_query(self,query,query_option="default"):
+
+    def run_query(self, query, query_option="default"):
         try:
             self.conn = psycopg2.connect(self.db_url)
-            
+
             self.conn.autocommit = True
             cur = self.conn.cursor(cursor_factory=RealDictCursor)
             cur.execute(query)
-            
+
             option = {
-                'default':cur,
+                'default': cur,
                 'fetch_all': cur.fetchall(),
                 'fetch_one': cur.fetchone(),
             }
@@ -30,8 +32,8 @@ class DB_Manager:
 
     def create_tables(self):
 
-        sql_file = open('api/util/tables.sql','r') 
-        
+        sql_file = open('api/util/tables.sql', 'r')
+
         self.run_query(query=sql_file.read())
 
         self.conn.close()
@@ -41,8 +43,7 @@ class DB_Manager:
                 DROP TABLE users, messages,
                             messages_sent, messages_received,
                             groups, group_users;
-                """ 
+                """
         self.run_query(query)
 
         self.conn.close()
-

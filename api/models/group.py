@@ -26,7 +26,7 @@ class Group:
     def create_group(self):
         query = """
                 INSERT INTO groups (
-                    name,role,createdby 
+                    name,role,createdby
                 )
                 VALUES ('{}', '{}', {}) RETURNING *;
                 """.format(self.name,

@@ -47,7 +47,7 @@ class Message:
         query = """
                 INSERT INTO messages (
                     subject,msgbody,
-                    parentid,status, 
+                    parentid,status,
                     createdby,isgroupmail
                 )
                 VALUES (
