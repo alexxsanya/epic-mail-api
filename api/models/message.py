@@ -174,7 +174,8 @@ class Message:
             rec_log = Message.query_a_table('messages_received',
                                             'messageid',
                                             msg['messageid'])
-            mgx[0]['receiverid'] = rec_log[0]['receiverid']
+            if(len(rec_log) > 0):
+                mgx[0]['receiverid'] = rec_log[0]['receiverid']
             sent_msg_db.append(mgx[0])
 
         return sent_msg_db
@@ -201,11 +202,13 @@ class Message:
                                               'messageid',
                                               msg_id)
             _msg[0]['senderid'] = _sender[0]['senderid']
-            _msg[0]['receiverid'] = _receiver[0]['receiverid']
-            _msg[0]['sender'] = User.get_user_email(_sender[0]['senderid'])
-            if _msg[0]['receiverid'] == c_user or \
-                    _msg[0]['senderid'] == c_user:
-                return _msg
+            if(len(_receiver) > 0):
+                _msg[0]['receiverid'] = _receiver[0]['receiverid']
+                _msg[0]['sender'] = User.get_user_email(_sender[0]['senderid'])
+                if _msg[0]['receiverid'] == c_user or \
+                        _msg[0]['senderid'] == c_user:
+                    return _msg
+            return _msg
 
             abort(jsonify({
                 'status': 403,
