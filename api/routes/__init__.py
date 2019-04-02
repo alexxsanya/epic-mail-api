@@ -11,6 +11,8 @@ from config import app_config
 
 from api.util import DB_Manager
 
+from flask_cors import CORS
+
 
 def create_app(app_env):
 
@@ -21,4 +23,6 @@ def create_app(app_env):
     app.register_blueprint(user_api, url_prefix="/api/v1")
     app.register_blueprint(msg_api, url_prefix="/api/v1")
     app.register_blueprint(g_api, url_prefix="/api/v1")
+
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     return app
