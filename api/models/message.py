@@ -202,7 +202,7 @@ class Message:
                                               msg_id)
             _msg[0]['senderid'] = _sender[0]['senderid']
             _msg[0]['receiverid'] = _receiver[0]['receiverid']
-
+            _msg[0]['sender'] = User.get_user_email(_sender[0]['senderid'])
             if _msg[0]['receiverid'] == c_user or \
                     _msg[0]['senderid'] == c_user:
                 return _msg

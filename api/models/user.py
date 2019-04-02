@@ -142,3 +142,18 @@ class User():
                 'status': '400',
                 'error': 'user {} doesn\'t exist'.format(email)
             }))
+
+    @staticmethod
+    def get_user_email(id):
+        query = f"""
+                    SELECT email FROM users WHERE
+                        id = {id};
+                """
+        result = User.db.run_query(query, query_option='fetch_all')
+
+        if result != []:
+            return result[0]['email']
+        abort(jsonify({
+            "error": 400,
+            "message": "User with id-{} doesn'\t exist".format(id)
+        }))
