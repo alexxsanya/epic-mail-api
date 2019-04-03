@@ -78,3 +78,27 @@ def get_all_sent():
 @jwt_required
 def delete_message(message_id):
     Message().delete_message(message_id)
+
+
+@msg_api.route('/messages/draft', methods=['POST'])
+@jwt_required
+def save_message():
+    msg = request.get_json()
+    if MessageValidator().validator(msg):
+        return Message(
+            subject=msg.get('subject', None),
+            msgBody=msg.get('msgBody', None),
+            parentId=msg.get('parentId', 0),
+            receiver=msg.get('receiver', None)
+        ).create_message()
+
+
+@msg_api.route('/messages/draft', methods=['GET'])
+@jwt_required
+def get_all_draft():
+    draft = Message.get_draft_messages()
+    return jsonify({
+        'status': 200,
+        'data': draft,
+        'info': 'Draft messages successfully retrieved'
+    })

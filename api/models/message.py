@@ -52,14 +52,14 @@ class Message:
                 )
                 VALUES (
                     '{}', '{}', {}, '{}', {},{}
-                    );
+                    ) RETURNING *;
                 """.format(self.subject,
                            self.msgBody, int(self.parentId),
                            self.status,
                            createdby,
                            self.is_group_mail)
 
-        self.db.run_query(query)
+        return self.db.run_query(query)
 
     def send_message(self):
         self.create_message()
@@ -156,6 +156,16 @@ class Message:
 
         unread_msg = [msg for msg in r_msgs if msg['status'] == 'sent']
         return unread_msg
+
+    @staticmethod
+    def get_draft_messages():
+        user_id = get_jwt_identity()
+        msg_query = """
+                SELECT * FROM messages WHERE
+                    createdby={} AND status='draft';
+                """.format(user_id)
+        result = Message.db.run_query(msg_query, 'fetch_all')
+        return result
 
     @staticmethod
     def get_sent_messages():

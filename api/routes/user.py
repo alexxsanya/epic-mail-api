@@ -36,3 +36,8 @@ def login():
 def get_api_doc():
 
     return redirect("https://epicmailapi.docs.apiary.io")
+
+
+@user_api.route('/auth/users',methods=['GET'])
+def get_all_user():
+    User.get_all_users()

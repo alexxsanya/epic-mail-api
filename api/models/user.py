@@ -157,3 +157,15 @@ class User():
             "error": 400,
             "message": "User with id-{} doesn'\t exist".format(id)
         }))
+
+    @staticmethod
+    def get_all_users():
+        query = """
+                    SELECT id, email,firstname,lastname
+                    FROM users;
+                """
+        users = User.db.run_query(query, query_option='fetch_all')
+        abort(jsonify({
+            "status": 200,
+            "data": users
+        }))
