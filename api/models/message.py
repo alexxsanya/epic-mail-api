@@ -235,8 +235,7 @@ class Message:
         _receiver = Message.query_a_table('messages_received',
                                           'messageid',
                                           msg_id)
-        if len(_msg) > 0 and len(_sender)\
-                and len(_receiver):
+        if len(_msg) > 0 and len(_sender):
 
             if user_id == _sender[0]['senderid'] or\
                     user_id == _receiver[0]['receiverid']:
@@ -245,7 +244,7 @@ class Message:
                     a = Message.delete_from_table('messages_sent', 'messageid',
                                                   msg_id)
                     print("deleted -> {}".format(a))
-                if user_id == _receiver[0]['receiverid']:
+                if len(_receiver) > 0:
                     Message.delete_from_table('messages_received', 'messageid',
                                               msg_id)
 
