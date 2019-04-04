@@ -71,3 +71,12 @@ def send_group_mail(group_id):
         group_id,
         **message
     )
+
+
+@g_api.route('/groups/<int:group_id>/users', methods=['GET'])
+@jwt_required
+def get_group_user(group_id):
+    message = request.get_json()
+    return Group.group_users(
+        group_id
+    )
