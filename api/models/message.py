@@ -154,7 +154,9 @@ class Message:
     def get_unread_messages():
         r_msgs = Message.get_received_messages()
 
-        unread_msg = [msg for msg in r_msgs if msg['status'] == 'sent']
+        unread_msg = [msg for msg in r_msgs
+                      if(msg['status'] == 'sent' and msg['readstatus'] == 'unread')]
+
         return unread_msg
 
     @staticmethod
@@ -199,6 +201,14 @@ class Message:
         Message.db.run_query(update_m)
 
     @staticmethod
+    def update_message_read_status(msg_id):
+        update_m = """
+                    UPDATE messages SET readstatus='read'
+                        WHERE id = {}
+                   """.format(msg_id)
+        Message.db.run_query(update_m)
+
+    @staticmethod
     def get_one_message(msg_id):
         c_user = get_jwt_identity()
         try:
@@ -212,6 +222,9 @@ class Message:
                                               'messageid',
                                               msg_id)
             _msg[0]['senderid'] = _sender[0]['senderid']
+
+            Message.update_message_read_status(msg_id)
+
             if(len(_receiver) > 0):
                 _msg[0]['receiverid'] = _receiver[0]['receiverid']
                 _msg[0]['sender'] = User.get_user_email(_sender[0]['senderid'])
