@@ -211,16 +211,16 @@ class Group:
                 """.format(msg.get('subject'), True, group_id)
 
             message = Group.db.run_query(query, 'fetch_all')
-            print(group_members)
+
             msg_id = message[0]['id']
 
             for member in group_members:
 
-                Message().receiver = member['userid']
+                receiver_id = member['userid']
 
                 Message.update_message_status(msg_id, 'sent')
 
-                Message().log_in_messages_received(msg_id)
+                Group.log_in_messages_received(receiver_id, msg_id)
 
                 Message().log_in_messages_sent(msg_id)
 
@@ -233,4 +233,51 @@ class Group:
         return jsonify({
             'error': 400,
             'message': 'No group with id - {}'.format(group_id)
+        })
+
+    @staticmethod
+    def log_in_messages_received(receiver_id, message_id):
+
+        rec_q = """
+                INSERT INTO messages_received (
+                    receiverid,messageid
+                )
+                VALUES (
+                    {}, {}
+                    );
+                """.format(receiver_id, message_id)
+
+        Group.db.run_query(rec_q)
+
+    @staticmethod
+    def group_users(group_id):
+        c_user = get_jwt_identity()
+        if Group.group_exists(group_id):
+            group_members = []
+            query = """
+                SELECT userid,userrole FROM group_users
+                 WHERE groupid={}
+            """.format(group_id)
+
+            users_query = """
+                SELECT id,firstname,lastname FROM users
+            """
+
+            group_users = Group.db.run_query(query, 'fetch_all')
+
+            users = Group.db.run_query(users_query, 'fetch_all')
+
+            for g_user in group_users:
+   
+                member = [u for u in users if (u['id'] == g_user['userid'])]
+                member[0]['role'] = g_user['userrole']
+                group_members.append(member[0])
+
+            return jsonify({
+                'status': 200,
+                'data': group_members
+            })
+        return jsonify({
+            'status': 200,
+            'data': []
         })
