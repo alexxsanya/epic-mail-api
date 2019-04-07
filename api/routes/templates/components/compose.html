@@ -1,0 +1,36 @@
+<div class="compose-message-container">
+    <div id="message-status"></div>
+    <div class="msg-receiver">
+        <div class="form-holder">
+            <input type="text" class="form-holder-item" id="msg-receiver" 
+                placeholder="Email to.." minlength="12" maxlength="300" required/>
+        </div>
+    </div>
+
+    <div class="msg-subject">
+        <div class="form-holder">
+            <input type="text" class="form-holder-item" id="msg-subject" 
+                    placeholder="Subject" minlength="4" maxlength="200" required/>
+        </div>
+    </div>
+
+    <div class="msg-body">
+        <textarea  class="form-holder-item" placeholder="Message body" id="msg-body"></textarea>
+    </div>    
+    <div class="message-bar">
+        <div class="actions">
+            <div class="item">
+                <button type="button" id="send_message" 
+                    onclick="sendMessage('send')" class="form-holder-item" style="margin-top:0;width:100%;">Send
+                </button>
+            </div>
+            <div class="item">
+                <button type="button" id="save_message" 
+                    onclick="sendMessage('save')" class="form-holder-item" 
+                    style="margin-top:0;width:100%">
+                    Save As Draft
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

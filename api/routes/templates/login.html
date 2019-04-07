@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            EPIC MAIL SYSTEM
+        </title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="description" content="EPIC-MAIL SYSTEM">
+        <meta name="author" content="alexxsanya">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="stylesheet" href="static/css/login.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="logo">
+                EPIC MAIL
+            </div>
+            <div class="box">
+                <form class="login-form" method="POST" id="login-form">
+                    <div id="login-status"></div>
+                    <div class="form-holder">
+                        <label class="form-holder-label">
+                            <span style="font-size: 1.5em; color: #fff;">
+                                <i class="far fa-user"></i>
+                            </span>
+                        </label>
+                        <input type="text" class="form-holder-item" id="user-name" 
+                            placeholder="username" minlength="4" maxlength="15" required/>
+                    </div>
+
+                    <div class="form-holder">
+                        <label class="form-holder-label">
+                            <span style="font-size: 1.5em; color: #fff;">
+                                <i class="fab fa-expeditedssl"></i>
+                            </span>
+                        </label>
+                        <input type="password" class="form-holder-item" id="user-pass" 
+                                placeholder="password" minlength="6" maxlength="15" required/>
+                    </div>
+
+                    <div class="form-holder ">
+                         <button type="button" id='login-btn' class="form-holder-item">Login</input>
+                    </div>
+                    <div class="form-holder step-down">
+                        <a href="./signup.html" class="form-holder-action no__account">
+                            No Account ?. Create Account Now
+                        </a>
+                        <a href="#" class="form-holder-action forgot_password" 
+                            onclick="document.getElementById('reset-pass-modal').style.display='block'" >forgot password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="reset-pass-modal" class="modal">
+                <span onclick="document.getElementById('reset-pass-modal').style.display='none'" 
+                    class="close" title="Close Modal">&times;</span>
+                <div class="modal-content">
+                    <div class="modal-title">
+                        Enter Your Email or Phone Number to receive a reset link
+                    </div>
+                    <div class="modal-main">
+                        <div class="form-holder">
+                            <input type="text" class="form-holder-item" id="recover-to" 
+                                placeholder="Enter Your Email Here or Phone Number" minlength="12" maxlength="35" required/>
+                            <button type="submit" class="recover-button" id='reset-pass'>OK</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>  
+    </body>
+
+    <script src="static/js/App.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        window.onload = function(){
+            LoginApp()
+        }
+    </script>
+
+</html>
