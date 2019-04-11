@@ -2,10 +2,13 @@ const APP_URL = '/api/v1/'
 const TOKEN = sessionStorage.getItem('token')
 const loadLocalHTML = (uri) =>  {
     var htmlCode = '';
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
-            htmlCode = xmlhttp.responseText;
+    const uri = "./components/" + uri;
+    fetch(uri, {
+        method: 'GET',
+        })
+        .then(response => response.text())
+        .then(data => {
+            htmlCode = data;
             document.getElementById('main-body').innerHTML = htmlCode;
 
             if (uri == "./components/groups.html") {
@@ -15,11 +18,10 @@ const loadLocalHTML = (uri) =>  {
                     APP_URL + 'groups',
                     {
                         headers: new Headers({
-                            'User-agent': 'Mozilla/4.0 Custom User Agent',
-                            'Authorization': `Bearer ${TOKEN}`
+                            'User-agent': 'Mozilla/4.0 Custom User Agent'
                         })
                     })
-                    .then(response => response.json())
+                    .then(response => response.text())
                     .then(data => {
                         groupList = data.data
 
@@ -53,11 +55,8 @@ const loadLocalHTML = (uri) =>  {
                     })
                     .catch(error => console.error(error))
             }
-        }
-    };
-    uri = "./components/" + uri;
-    xmlhttp.open("GET", uri, true);
-    xmlhttp.send();
+        })
+        .catch(error => console.error(error))
 }
 
 const loadMessage = (caption) => {
