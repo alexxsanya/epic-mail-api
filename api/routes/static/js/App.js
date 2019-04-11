@@ -2,7 +2,7 @@ const APP_URL = '/api/v1/'
 const TOKEN = sessionStorage.getItem('token')
 const loadLocalHTML = (uri) =>  {
     let htmlCode = '';
-    const uri = "./components/" + uri;
+    const uri = `./components/${uri}`;
     fetch(uri, {
         method: 'GET',
         })
@@ -15,7 +15,7 @@ const loadLocalHTML = (uri) =>  {
                 groups = document.getElementById('group-list')
 
                 fetch(
-                    APP_URL + 'groups',
+                    `${APP_URL}groups`,
                     {
                         headers: new Headers({
                             'User-agent': 'Mozilla/4.0 Custom User Agent'
@@ -62,7 +62,7 @@ const loadLocalHTML = (uri) =>  {
 const loadMessage = (caption) => {
 
     document.getElementById('main-body').innerHTML = "Loading...";
-    let url = APP_URL + 'messages/' + caption
+    let url = `${APP_URL}messages/${caption}`
     sessionStorage.setItem('current_page', caption)
     url = {
         'inbox': 'messages',
@@ -71,7 +71,7 @@ const loadMessage = (caption) => {
         'unread': 'messages/unread'
     }
     fetch(
-        APP_URL + url[caption],
+        `${APP_URL}${url[caption]}`,
         {
             method: 'GET',
             mode: "cors",
@@ -123,7 +123,7 @@ const loadMessage = (caption) => {
 const readMessage = (msg_id) => {
     current_page = sessionStorage.getItem('current_page')
     fetch(
-        APP_URL + 'messages/' + msg_id,
+        `${APP_URL}messages/${msg_id}`,
         {
             headers: new Headers({
                 'User-agent': 'Mozilla/4.0 Custom User Agent',
@@ -209,7 +209,7 @@ const addGroup = () => {
             "name": name,
             "role": role
         }
-        url = APP_URL + "groups"
+        url = `${APP_URL}groups`
         fetch(url, {
             method: 'POST',
             mode: "cors",
@@ -311,12 +311,12 @@ const createUser = (e) => {
         let formData = new FormData(signupForm)
         let userData = {}
 
-        formData.set("email", formData.get('email') + '@epicmail.com');
+        formData.set("email", `${formData.get('email')}@epicmail.com`);
         formData.set('recovery_email', `${formData.get('firstname')}.r@epicmail.com`)
 
         formData.forEach((value, key) => { userData[key] = value });
 
-        url = APP_URL + "auth/signup"
+        url = `${APP_URL}auth/signup`
         fetch(url, {
             method: 'POST',
             mode: "cors",
@@ -363,8 +363,8 @@ const sendMessage = (action) => {
     save_message.disabled = true
 
     option = {
-        'save': APP_URL + "messages/draft",
-        'send': APP_URL + "messages"
+        'save': `${APP_URL}messages/draft`,
+        'send': `${APP_URL}messages`
     }
 
     if (msg_receiver.length > 6 && msg_body.length > 1) {
@@ -552,7 +552,7 @@ const generateUserList = () => {
                 USERS_LIST.forEach(user => {
                     let option = document.createElement('option');
 
-                    username = user.id.toString() + '-' + user.firstname
+                    username = `${user.id.toString()} - ${user.firstname}` 
                     option.innerHTML = username;
                     user_selector.appendChild(option);
 
@@ -716,7 +716,7 @@ const LoginApp = () => {
                 'email': `${username}@epicmail.com`,
                 'password': pass
             };
-            url = APP_URL + "auth/login"
+            url = `${APP_URL}auth/login`
             fetch(url, {
                 method: 'POST',
                 mode: "cors",
