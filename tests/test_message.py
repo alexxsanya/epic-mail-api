@@ -185,3 +185,10 @@ class TestMessageAPI(BaseClass):
             headers=dict(Authorization='Bearer ' + self.token)
         )
         self.assertIn(b'Hey Bella', response.data)
+
+    def test_get_draft_message(self):
+        response = self.client.get(
+            '/api/v1/messages/draft',
+            headers=dict(Authorization='Bearer ' + self.token)
+        )
+        self.assertIn(b'Draft messages successfully retrieved', response.data)
