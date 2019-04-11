@@ -1,7 +1,7 @@
 const APP_URL = '/api/v1/'
 const TOKEN = sessionStorage.getItem('token')
 const loadLocalHTML = (uri) =>  {
-    var htmlCode = '';
+    let htmlCode = '';
     const uri = "./components/" + uri;
     fetch(uri, {
         method: 'GET',
@@ -62,7 +62,7 @@ const loadLocalHTML = (uri) =>  {
 const loadMessage = (caption) => {
 
     document.getElementById('main-body').innerHTML = "Loading...";
-    var url = APP_URL + 'messages/' + caption
+    let url = APP_URL + 'messages/' + caption
     sessionStorage.setItem('current_page', caption)
     url = {
         'inbox': 'messages',
@@ -88,7 +88,7 @@ const loadMessage = (caption) => {
                 sessionStorage.removeItem('token')
                 location.reload()
             }
-            var ui_data = "<table>";
+            let ui_data = "<table>";
             if (isEmpty(data.data)) {
                 ui_data += `<caption> Currently No ${caption} Messages</caption>`;
             } else {
@@ -113,7 +113,7 @@ const loadMessage = (caption) => {
         });
 
     const isEmpty = (arg) => {
-        for (var item in arg) {
+        for (let item in arg) {
             return false;
         }
         return true;
@@ -172,8 +172,8 @@ const readMessage = (msg_id) => {
 }
 
 const resetPassword = () => {
-    var reset_btn = document.getElementById('reset-pass')
-    var reset_value = document.getElementById('recover-to')
+    let reset_btn = document.getElementById('reset-pass')
+    let reset_value = document.getElementById('recover-to')
 
     reset_btn.disabled = true
 
@@ -193,9 +193,9 @@ const resetPassword = () => {
 }
 
 const addGroup = () => {
-    var add_group = document.getElementById('create-group-container')
-    var add_member = document.getElementById('add-member-container')
-    var create_group_btn = document.getElementById('create-group')
+    let add_group = document.getElementById('create-group-container')
+    let add_member = document.getElementById('add-member-container')
+    let create_group_btn = document.getElementById('create-group')
     add_group.setAttribute('style', 'display:flex');
     add_member.setAttribute('style', 'display:none')
 
@@ -238,9 +238,9 @@ const addGroup = () => {
 }
 
 const addMembertoGroup = () => {
-    var add_group_div = document.getElementById('create-group-container')
-    var add_member_div = document.getElementById('add-member-container')
-    var add_member_btn = document.getElementById('add-member')
+    let add_group_div = document.getElementById('create-group-container')
+    let add_member_div = document.getElementById('add-member-container')
+    let add_member_btn = document.getElementById('add-member')
     add_member_div.setAttribute('style', 'display:flex')
     add_group_div.setAttribute('style', 'display:none')
 
@@ -550,7 +550,7 @@ const generateUserList = () => {
 
             if (data.error == undefined) {
                 USERS_LIST.forEach(user => {
-                    var option = document.createElement('option');
+                    let option = document.createElement('option');
 
                     username = user.id.toString() + '-' + user.firstname
                     option.innerHTML = username;
@@ -685,8 +685,8 @@ const App = () => {
         location.replace('./login.html')
     }
 
-    var modal = document.getElementById('display-modal');
-    var group_member_modal = document.getElementById('group-member-modal');
+    let modal = document.getElementById('display-modal');
+    let group_member_modal = document.getElementById('group-member-modal');
     window.onclick =  (event) => {
         if (event.target == modal) {
             modal.style.display = "none";
