@@ -215,8 +215,29 @@ class TestGroupAPI(BaseClass):
         )
 
         response = self.client.get(
-            '/api/v1/groups/1',
+            '/api/v1/groups/1/users',
             headers=dict(Authorization='Bearer ' + self.token)
         )
 
         self.assertIn(b'[]', response.data)
+
+    def test_get_group_members_where_members_exist(self):
+        self.signup
+        self.client.post(
+            '/api/v1/groups',
+            data=self.group,
+            content_type="application/json",
+            headers=dict(Authorization='Bearer ' + self.token)
+        )
+        self.client.post(
+            'api/v1/groups/1/users',
+            data=self.g_member,
+            content_type="application/json",
+            headers=dict(Authorization='Bearer ' + self.token)
+        )
+        response = self.client.get(
+            '/api/v1/groups/1/users',
+            headers=dict(Authorization='Bearer ' + self.token)
+        )
+
+        self.assertIn(b'Bella', response.data)
