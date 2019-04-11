@@ -233,11 +233,6 @@ class Message:
                     return _msg
             return _msg
 
-            abort(jsonify({
-                'status': 403,
-                'error': 'access denied'
-            }))
-
         except IndexError:
             abort(jsonify({
                 'status': 204,

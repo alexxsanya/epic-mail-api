@@ -29,7 +29,7 @@ class TestMessageAPI(BaseClass):
             content_type="application/json",
             headers=dict(Authorization='Bearer ' + self.token)
         )
-        self.assertIn('can not be this small in length', str(response.data))
+        self.assertIn('atleast a 4 letter Subject', str(response.data))
 
     def test_message_without_valid_body(self):
         response = self.client.post(
@@ -104,24 +104,6 @@ class TestMessageAPI(BaseClass):
             headers=dict(Authorization='Bearer ' + self.token)
         )
         self.assertIn('No message with supplied message', str(response.data))
-
-    def test_message_cant_be_ready_by_non_owner(self):
-        login2 = self.client.post(
-            '/api/v1/auth/login',
-            data=self.user2,
-            content_type="application/json"
-        )
-        token2 = json.loads(login2.data.decode())['data'][0]['token']
-        self.client.post(
-            '/api/v1/messages', data=self.message,
-            content_type="application/json",
-            headers=dict(Authorization='Bearer ' + token2)
-        )
-        response = self.client.get(
-            '/api/v1/messages/1',
-            headers=dict(Authorization='Bearer ' + self.token)
-        )
-        self.assertIn(b'access denied', response.data)
 
     def test_delete_my_existing_message(self):
         self.client.post(
