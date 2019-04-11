@@ -205,3 +205,18 @@ class TestGroupAPI(BaseClass):
         )
 
         self.assertIn(b"No group with id", response.data)
+
+    def test_get_group_with_no_members(self):
+        self.client.post(
+            '/api/v1/groups',
+            data=self.group,
+            content_type="application/json",
+            headers=dict(Authorization='Bearer ' + self.token)
+        )
+
+        response = self.client.get(
+            '/api/v1/groups/1',
+            headers=dict(Authorization='Bearer ' + self.token)
+        )
+
+        self.assertIn(b'[]', response.data)
