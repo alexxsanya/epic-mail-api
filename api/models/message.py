@@ -58,8 +58,12 @@ class Message:
                            self.status,
                            createdby,
                            self.is_group_mail)
-
-        return self.db.run_query(query)
+        status = self.db.run_query(query)
+        return jsonify({
+            'status': 201,
+            'data': str(status),
+            'message': 'message saved as draft'
+            })
 
     def send_message(self):
         self.create_message()
