@@ -483,9 +483,6 @@ const deleteGroup = (id) => {
 const sendGroupMessage = (group_id, group_name) => {
     document.getElementById('display-modal').style.display = 'block'
 
-    let container = document.getElementById('main-area')
-    let modal_title = document.getElementById('modal-title')
-
     sendGMessage =  () => {
 
         let msg_subject = document.getElementById('g-msg-subject').value
@@ -512,7 +509,7 @@ const sendGroupMessage = (group_id, group_name) => {
             .then(data => {
 
                 if (data.error == undefined) {
-                    status_label.innerHTML = `<success>Message has been sent</success>`
+                    status_label.innerHTML = `<success>Message has been sent to ${group_name}</success>`
 
                     setTimeout( () => {
                         document.getElementById('display-modal').style.display = 'none'
@@ -648,7 +645,7 @@ const showMembers = (group_id, group_name) => {
         })
         .catch(error => console.error(error))
 
-    const removeGroupUser = (user_id) => {
+        removeGroupUser = (user_id) => {
         status_label = document.getElementById('memba-msg-status')
         fetch(`${APP_URL}groups/${group_id}/users/${user_id}`, {
             method: 'DELETE',
