@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            EPIC MAIL SYSTEM
+        </title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="description" content="EPIC-MAIL SYSTEM">
+        <meta name="author" content="alexxsanya">
+        {% block styles %}
+            <link rel="stylesheet" href="{{url_for('.static', filename='css/layout.css')}}"> 
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        {% endblock %} 
+        {% block scripts %}
+        <script src="{{url_for('.static', filename='js/App.js')}}"></script>
+        <script type="text/javascript">
+            window.onload = function(){
+                current_page = sessionStorage.getItem('current_page')
+                user = sessionStorage.getItem('username')
+                if(current_page==undefined){
+                    loadMessage('inbox')
+                }else{
+                    loadMessage(`${current_page}`)
+                }
+                document.getElementById('user-profile').innerHTML = `Hi, <b>${user}</b>`
+                App()
+            }
+        </script>
+        {% endblock %}
+   </head>
+
+    <body>
+        <div class="header">
+            <div class="logo">
+               <h3>EPIC MAIL</h3>
+            </div>
+            <div class="nav">
+                <div class="nav-item" id="user-profile">
+                    
+                </div>
+                <div class="nav-item">
+                    <a href="#" onclick="logout()"  class="logout">logout</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="sidebar">
+                <div class="menu-item compose-message-button " 
+                    onclick="loadLocalHTML('compose.html')"> 
+                    <i class="far fa-paper-plane"></i> &nbsp; Send a  Message 
+                </div>
+                <div class="menu-item" onclick="loadMessage('inbox')">
+                    <i class="fas fa-envelope-open-text"></i> &nbsp; Inbox
+                </div>
+                <div class="menu-item" onclick="loadMessage('unread')">
+                    <i class="fas fa-envelope"></i> &nbsp; Unread
+                </div>
+                <div class="menu-item" onclick="loadMessage('sent')">
+                    <i class="fas fa-envelope-open-text"></i> &nbsp; Sent
+                </div>
+                <div class="menu-item" onclick="loadMessage('draft')">
+                    <i class="fas fa-folder-open"></i> &nbsp; Draft
+                </div>
+                <div class="menu-item" onclick="loadLocalHTML('groups.html')">
+                    <i class="fas fa-users"></i> &nbsp; Groups
+                </div>
+            </div>
+            <div class="mainbar">
+                <div id="main-body">
+
+                </div>
+            </div>
+        </div>
+        <div id="display-modal" class="modal">
+                <span onclick="document.getElementById('display-modal').style.display='none'" 
+                    class="close" title="Close Modal">&times;</span>
+                <div class="modal-content">
+                    <div class="leftcolumn">
+                        <div class="card" id="main-area">
+                            <h3 id="model-title">Send Message to a Group</h3>
+                            <div class="compose-message-container">
+                                    <status id="group-msg-status"></status>
+                                    <div class="msg-subject">
+                                        <div class="form-holder">
+                                            <input type="text" class="form-holder-item" id="g-msg-subject" 
+                                                    placeholder="Subject" minlength="4" maxlength="200" required/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="msg-body">
+                                        <textarea  class="form-holder-item" 
+                                        placeholder="Message body" 
+                                        id="g-msg-body" style="width:97%;padding:5px;min-height:5vh"></textarea>
+                                    </div>    
+                                <div class="message-bar">
+                                    <div class="actions">
+                                        <div class="item">
+                                            <div id="send_group_message" onclick="sendGMessage()">Send</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>    
+                </div>
+        </div> 
+
+        <div id="group-member-modal" class="modal">
+                <span onclick="document.getElementById('group-member-modal').style.display='none'" 
+                    class="close" title="Close Modal">&times;</span>
+                <div class="modal-content" style="min-width:500px !important;padding: 20px;">
+                    <div class="leftcolumn">
+                        <div class="card" id="main-area">
+                            <status id="memba-msg-status"></status>
+                            <div id="members-list">
+                                
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+        </div> 
+    </body>
+</html>

@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS messages
         msgBody TEXT NOT NULL,
         parentId INT NOT NULL,
         status VARCHAR(50) NOT NULL,
+        readStatus VARCHAR(50) DEFAULT 'unread',
         IsGroupMail BOOLEAN DEFAULT FALSE,
         createdOn TIMESTAMP DEFAULT NOW(),
         createdBy INT NOT NULL,
@@ -43,8 +44,8 @@ CREATE TABLE IF NOT EXISTS messages_received
 CREATE TABLE IF NOT EXISTS groups
     (
         id SERIAL PRIMARY KEY,
-        name VARCHAR(50) NOT NULL UNIQUE,
-        role VARCHAR(50) NOT NULL UNIQUE,
+        name VARCHAR(50) NOT NULL,
+        role VARCHAR(50) NOT NULL,
         createdBy INT NOT NULL,
         createOn TIMESTAMP DEFAULT NOW(),
         FOREIGN KEY (createdBy) REFERENCES users (id)

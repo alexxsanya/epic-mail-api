@@ -1,0 +1,211 @@
+body{
+    background-color: #eef0f1;
+    background-repeat:no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    font-family:Raleway, Open Sans, Droid Sans, Roboto,arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 97.7vh;
+    flex-direction: column;
+}
+.logo{
+    min-height: 80px;
+    color: #3379f5;
+    font-size: 2em;
+    text-align: center;
+    font-weight: 900;
+    font-family:Roboto;
+}
+
+.box{
+    background-color: #fff;
+    border:1px solid #daddde;
+    width: 400px;
+    min-height: 300px;
+    /*border-radius:10px;*/
+}
+
+.login-form{
+    padding:80px 80px;
+}
+.signup-form{
+    padding:50px 70px;
+}
+
+.form-holder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5.7vh;
+    flex-direction: row;
+    margin:15px 0;
+}
+
+.form-holder-label{
+    flex-grow: 1;
+    background-color: #3379f5;
+    height: 4.6vh;
+    text-align: center;
+    line-height: 4.6vh;
+    padding: 2px 4px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+.form-holder-label.email{
+    /*border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;*/
+    padding: 2px 10px;
+    font-size: 18px;
+}
+.form-holder-item{
+    flex-grow: 8;
+    padding:2px 3px;
+    line-height: 4vh;
+    /*border-top-right-radius: 5px;*/
+    font-size:15px;
+    /*border-bottom-right-radius: 5px;*/
+}
+
+.form-holder-action{
+    width:100%;
+    color:#eee;
+    font-size: 0.9rem;
+}
+a.form-holder-action{
+    text-decoration: none;
+}
+button.form-holder-item{
+    margin-top:35px;
+    /*border-radius: 5px;*/
+    width:80%;
+    border-width: 0px;
+    border-style: outset;
+    border-image: initial;
+    font-size: 1.2rem;
+    color: #ffffff;
+    background: #3379f5;
+    cursor: pointer;
+}
+
+.text-center{
+    text-align: center;
+}
+.text-left{
+    text-align: left;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.step-down{
+    margin-top: 30px;
+    display: flex;
+    flex-direction:column;
+}
+
+.step-down a{
+    margin: 10px 0;
+}
+.step-down a.no__account{
+    margin: 10px;
+    margin-top: 20px;
+    color: #444;
+}
+
+.step-down a.forgot_password{
+    margin: 10px;
+    margin-top: 20px;
+    color: #666;
+}
+.step-down a.login{
+    margin-top: 20px;
+    color: #444;
+    padding: 8px 5px;
+    width: 100px;
+    align-self: flex-start;
+    text-align: left;
+}
+.step-down a.login:hover{
+    border:1px solid #3379f5;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 70%;
+    width: 35%;
+    height: 20%;
+    overflow: hidden;
+    background-color: rgba(0,0,0, 0.9);
+    padding-top: 30px;
+    border-bottom-left-radius: 25%;
+} 
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    padding:10px 20px;
+}
+.modal-title {
+    color:#fff;
+    width:100%;
+    font-size: 15px;
+}
+.close {
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #f1f1f1;
+}
+
+.close:hover,
+.close:focus {
+    color: #f44336;
+    cursor: pointer;
+}
+
+.recover-button{
+    width: 15%;
+    margin: 0;
+    /*border-radius: 0px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;*/
+    padding: 6px 0;
+    border-width: 0px;
+    border-style: outset;
+    border-image: initial;
+    font-size: 1.2rem;
+    color: #ffffff;
+    background: #3379f5;
+    cursor: pointer;
+}
+
+#recover-to{
+    text-transform: lowercase;
+    font-size: 16px;
+}
+
+#pass-status{
+    display: none
+}
+error,success{
+    color: #F44336;
+    padding: 5px 10px;
+    background: #efe3e3;
+    /*border-radius: 5px;*/
+    text-align: center;
+    font-size: 0.9em;
+    width: 60%;
+    margin: auto;
+  }
+  success{
+    color: #444;
+    background: #b0ef3b4d;
+  }

@@ -1,0 +1,53 @@
+<div class="groups-container">
+  <div class="groups-view" id="group-list">
+      Loading...
+  </div>
+  <div class="groups-section">
+    <div class="action">
+        <div class="item" onclick="addGroup()">
+          Add Group
+        </div>
+        <div class="item" onclick="addMembertoGroup()">
+            Add Member
+        </div>
+    </div>
+    <div class="groups-forms">
+      <div id="create-group-container">
+          <status id="resp-status"></status>
+          <div class="form-holder">
+              <input type="text" class="form-holder-item" id="group-name" 
+                  placeholder="Group name" minlength="4" maxlength="15" required/>
+          </div>
+          <div class="form-holder">
+              <textarea placeholder="Group Role" 
+                id="group-description" style="width: 100%;height: 6vh;"></textarea>
+            </div>
+          <div class="form-holder ">
+              <button type="button" id="create-group" class="form-holder-item">Create</input>
+         </div>
+      </div>
+      <div id="add-member-container">
+          <status id="mgroup-status"></status>
+          <div class="form-holder">
+              <select class="form-holder-item" id="member-group-name" >
+                  <option>Group Name</option>
+              </select>
+          </div>
+          <div class="form-holder" id="users-selector">
+              <input type="text" class="form-holder-item" id="member-user-name" 
+                  placeholder="Member Name" minlength="4" maxlength="15" list="user-list" required/>
+              <datalist id="user-list">
+              </datalist>
+          </div>
+          <div class="form-holder">
+              <input type="text" class="form-holder-item" id="member-user-role" 
+                  placeholder="Member Role" minlength="4" maxlength="15" required/>
+          </div>
+          <div class="form-holder ">
+              <button type="button" 
+                class="form-holder-item" id="add-member">Add</input>
+         </div>
+      </div>
+    </div>
+  </div>
+</div>
