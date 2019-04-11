@@ -7,6 +7,17 @@ class UserAPITests(BaseClass):
     def test_create_user(self):
         self.assertEqual(self.signup.status_code, 200)
 
+    def test_create_user_existent_user(self):
+        self.signup
+        response = self.client.post(
+            '/api/v1/auth/signup',
+            data=self.existent_user,
+            content_type="application/json"
+        )
+
+        self.assertIn("Your Email address already exist in the system",
+                      str(response.data))
+
     def test_cant_create_user_with_an_invalid_email(self):
         response = self.client.post(
             '/api/v1/auth/signup',
@@ -93,3 +104,9 @@ class UserAPITests(BaseClass):
             '/api/v1/doc'
         )
         self.assertEqual(response.status_code, 302)
+
+    def test_get_all_users(self):
+        response = self.client.get(
+            'api/v1/auth/users'
+        )
+        self.assertEqual(response.status_code, 200)
