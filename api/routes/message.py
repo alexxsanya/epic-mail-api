@@ -12,12 +12,6 @@ msg_api = Blueprint("msg_api", __name__)
 @jwt_required
 def send_message():
     msg = request.get_json()
-    if not msg:
-        return jsonify({
-            'error': 'Invalid Request Body',
-            'status': 400
-        })
-
     if MessageValidator().validator(msg):
         return Message(
             subject=msg.get('subject', None),
