@@ -178,7 +178,6 @@ const resetPassword = () => {
     reset_btn.disabled = true
 
     reset_btn.addEventListener('click', () => {
-        console.log(reset_value.value)
         reset_value.value = ""
         alert("Check Your Email or Phone SMS for Reset Link")
 
@@ -188,7 +187,6 @@ const resetPassword = () => {
 
     reset_value.addEventListener('keyup', () => {
         if (reset_value.value.length > 12) {
-            console.log("You can now request for a request")
             reset_btn.disabled = false
         }
     })
@@ -225,7 +223,6 @@ const addGroup = () => {
             .then(data => {
 
                 if (data.error == undefined) {
-                    console.log(data.data)
                     status_label.innerHTML = '<success>Group successfully created</success>'
                     setTimeout( () => {
                         loadLocalHTML('groups.html')
@@ -277,7 +274,6 @@ const addMembertoGroup = () => {
             .then(data => {
 
                 if (data.error == undefined) {
-                    console.log(data.data)
                     status_label.innerHTML = '<success>Member successfully added</success>'
                     setTimeout( () => {
                         loadLocalHTML('groups.html')
@@ -296,7 +292,6 @@ const createUser = (e) => {
     let signup_btn = document.getElementById('create-user-btn')
     let status_label = document.getElementById('signup-status')
     e.preventDefault()
-    console.log(signup_is_valid)
     if (false in signup_is_valid) {
 
         invalid_fields = []
@@ -305,7 +300,6 @@ const createUser = (e) => {
             if (value == false) {
                 invalid_fields.push(key)
             }
-            console.log(invalid_fields)
         })
         signup_btn.innerText = "CREATE Account"
 
@@ -335,13 +329,11 @@ const createUser = (e) => {
             .then(data => {
 
                 if (data.error == undefined) {
-                    console.log(data['data'][0].user)
                     status_label.innerHTML = '<success>Account Created</success>'
                     sessionStorage.setItem('token', data['data'][0].token)
                     sessionStorage.setItem('username', data['data'][0].user.firstname)
                     location.replace("./")
                 } else {
-                    console.log(data.error)
                     status_label.innerHTML = `<error>${data.error}</error>`
                     signup_btn.disabled = false
                     signup_btn.innerText = "CREATE Account"
@@ -395,13 +387,11 @@ const sendMessage = (action) => {
             .then(data => {
 
                 if (data.error == undefined) {
-                    console.log(data.data.message)
                     status_label.innerHTML = `<success>${data.data.message}</sucess>`
                     setTimeout( () => {
                         loadMessage('inbox')
                     }, 5000)
                 } else {
-                    console.log(data.error)
                     send_message.disabled = false
                     save_message.disabled = false
                     save_message.style.background = '#3379f5'
@@ -453,7 +443,6 @@ const deleteMessage = (id) => {
             .then(data => {
 
                 if (data.error == undefined) {
-                    console.log(data.data.message)
                     alert(data.data.message)
                     location.replace("./")
                 } else {
@@ -479,7 +468,6 @@ const deleteGroup = (id) => {
             .then(data => {
 
                 if (data.error == undefined) {
-                    console.log(data.data)
                     alert("Group deleted successfully")
                     setTimeout( () => {
                         loadLocalHTML('groups.html')
@@ -524,7 +512,6 @@ const sendGroupMessage = (group_id, group_name) => {
             .then(data => {
 
                 if (data.error == undefined) {
-                    console.log(data.data)
                     status_label.innerHTML = `<success>Message has been sent</success>`
 
                     setTimeout( () => {
@@ -534,8 +521,8 @@ const sendGroupMessage = (group_id, group_name) => {
 
                 } else {
                     status_label.innerHTML = `
-                    <error>Message has not been sent, try again</error>
-                `
+                        <error>Message has not been sent, try again</error>
+                    `
                     console.log(data.error)
                 }
                 send_btn.innerText = 'Send'
@@ -566,10 +553,7 @@ const generateUserList = () => {
                     var option = document.createElement('option');
 
                     username = user.id.toString() + '-' + user.firstname
-                    // option.value = user.id.toString()
                     option.innerHTML = username;
-
-                    console.log(`${user.id}-${user.firstname}`)
                     user_selector.appendChild(option);
 
                 })
@@ -624,7 +608,6 @@ const showMembers = (group_id, group_name) => {
         .then(data => {
 
             USERS_LIST = data.data
-            console.log(USERS_LIST)
             if (data.error == undefined) {
 
                 memberHTML = `
@@ -696,7 +679,7 @@ const logout = () => {
 }
 
 const App = () => {
-    console.log('EPIC-MAIL system loaded')
+    
     token = sessionStorage.getItem('token')
     if (token === null || token.length < 150) {
         location.replace('./login.html')
@@ -746,12 +729,12 @@ const LoginApp = () => {
                 .then(data => {
 
                     if (data.error == undefined) {
-                        console.log(data['data'][0].user)
+                        
                         sessionStorage.setItem('token', data['data'][0].token)
                         sessionStorage.setItem('username', data['data'][0].user.firstname)
                         location.replace("./")
                     } else {
-                        console.log(data.error)
+                        
                         status_label.innerHTML = `<error>${data.error}</error>`
                         login_btn.disabled = false
                         login_btn.innerText = "Login"
