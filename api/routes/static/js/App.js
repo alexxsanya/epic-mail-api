@@ -2,8 +2,8 @@ const APP_URL = '/api/v1/'
 const TOKEN = sessionStorage.getItem('token')
 const loadLocalHTML = (uri) =>  {
     let htmlCode = '';
-    const uri = `./components/${uri}`;
-    fetch(uri, {
+    
+    fetch(`./components/${uri}`, {
         method: 'GET',
         })
         .then(response => response.text())
@@ -11,37 +11,40 @@ const loadLocalHTML = (uri) =>  {
             htmlCode = data;
             document.getElementById('main-body').innerHTML = htmlCode;
 
-            if (uri == "./components/groups.html") {
+            if (uri == "groups.html") {
                 groups = document.getElementById('group-list')
 
                 fetch(
                     `${APP_URL}groups`,
                     {
+                        method: 'GET',
+                        mode: "cors",
                         headers: new Headers({
-                            'User-agent': 'Mozilla/4.0 Custom User Agent'
+                            'User-agent': 'Mozilla/4.0 Custom User Agent',
+                            'Authorization': `Bearer ${TOKEN}`
                         })
                     })
-                    .then(response => response.text())
+                    .then(response => response.json())
                     .then(data => {
                         groupList = data.data
-
                         groupHTML = `
-                    <table style="min-width:400px !important;">
-                    <caption>User Groups</caption>
-                    `
+                            <table style="min-width:400px !important;">
+                            <caption>User Groups</caption>
+                            `
                         groupList.forEach(group => {
                             groupHTML += `
-                        <tr>
-                        <td onclick="showMembers(${group.id},'${group.name}')">${group.name}</td>
-                        <td>${group.role}</td>
-                        <td class='td-action positive' onclick="sendGroupMessage(${group.id},'${group.name}')">
-                            <i class="far fa-paper-plane"></i>
-                        </td>
-                        <td class='td-action' onclick="deleteGroup(${group.id})">
-                            <i class="far fa-trash-alt"></i>
-                        </td>
-                        </tr>
-                    `
+                                <tr>
+                                <td onclick="showMembers(${group.id},'${group.name}')">${group.name}</td>
+                                <td>${group.role}</td>
+                                <td class='td-action positive' 
+                                    onclick="sendGroupMessage(${group.id},'${group.name}')">
+                                    <i class="far fa-paper-plane"></i>
+                                </td>
+                                <td class='td-action' onclick="deleteGroup(${group.id})">
+                                    <i class="far fa-trash-alt"></i>
+                                </td>
+                                </tr>
+                            `
                         })
                         if (groupList.length < 0) {
                             groupHTML = `
