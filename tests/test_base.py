@@ -32,6 +32,14 @@ class BaseClass(TestCase):
             "password": "Alex@11",
             "recovery_email": "alex@gmail.com"
         })
+
+        self.existent_user = json.dumps({
+            "email": "bella@epicmail.com",
+            "firstname": "Bella",
+            "lastname": "Kab",
+            "password": "Bella@11",
+            "recovery_email": "bellah@gmail.com"
+        })
         self.missing_email = json.dumps({
             "email": "",
             "firstname": "Bella",
