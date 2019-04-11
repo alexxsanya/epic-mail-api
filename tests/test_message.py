@@ -192,3 +192,11 @@ class TestMessageAPI(BaseClass):
             headers=dict(Authorization='Bearer ' + self.token)
         )
         self.assertIn(b'Draft messages successfully retrieved', response.data)
+
+    def test_save_draft_message(self):
+        response = self.client.post(
+            '/api/v1/messages/draft', data=self.message,
+            content_type="application/json",
+            headers=dict(Authorization='Bearer ' + self.token)
+        )
+        self.assertIn(b'message saved as draft', response.data)
