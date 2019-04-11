@@ -190,5 +190,5 @@ Request body:
 
 *  [Heroku](https://api-epicmail.herokuapp.com/api/v1/)
 *  [API Documentation](https://api-epicmail.herokuapp.com/api/v1/doc)
-*  [Front-end](https://alexxsanya.github.io/EPIC-MAIL/UI/login.html)
+*  [Front-end](https://api-epicmail.herokuapp.com/login.html)
 
