@@ -1,8 +1,8 @@
 # EPIC MAIL API
 
 ## Project Status
-[![Build Status](https://travis-ci.org/alexxsanya/EPIC-MAIL-API.svg?branch=ch-refactor_tests-164957621)](https://travis-ci.org/alexxsanya/EPIC-MAIL-API)
-[![Coverage Status](https://coveralls.io/repos/github/alexxsanya/EPIC-MAIL-API/badge.svg?branch=ch-refactor_tests-164957621)](https://coveralls.io/github/alexxsanya/EPIC-MAIL-API?branch=ch-refactor_tests-164957621)
+[![Build Status](https://travis-ci.org/alexxsanya/EPIC-MAIL-API.svg?branch=develop)](https://travis-ci.org/alexxsanya/EPIC-MAIL-API)
+[![Coverage Status](https://coveralls.io/repos/github/alexxsanya/EPIC-MAIL-API/badge.svg?branch=develop)](https://coveralls.io/github/alexxsanya/EPIC-MAIL-API?branch=develop)
 
 ## Project Overview
 
